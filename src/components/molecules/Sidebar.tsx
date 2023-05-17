@@ -32,8 +32,8 @@ export function Sidebar() {
     {
       title: "Artist",
       path: stringRoutes.artist(),
-      iconDefault: assets.sidebar_icon.home.default,
-      iconActive: assets.sidebar_icon.home.active,
+      iconDefault: assets.sidebar_icon.artist.default,
+      iconActive: assets.sidebar_icon.artist.active,
     },
   ];
 

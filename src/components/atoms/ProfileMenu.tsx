@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { ArrowDropDown, Logout } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
-import { fakeFirstName, fakeImage } from "../../helper/fake-data-helper";
+import { fakeImage } from "../../helper/fake-data-helper";
 
 interface IProfileMenu {
   textDark?: boolean;
@@ -93,7 +93,7 @@ export const ProfileMenu = (props: IProfileMenu) => {
           <IconButton
             onClick={handleClick}
             size="small"
-            sx={{ paddingX: 1, ml: 2 }}
+            sx={{ paddingX: 3, paddingY: 1 }}
             aria-controls={open ? "account-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
@@ -105,7 +105,7 @@ export const ProfileMenu = (props: IProfileMenu) => {
               />
             </div>
             <div className={`text-xs ${!props.textDark && "text-white"}`}>
-              {fakeFirstName()}
+              {"RIVO PELU"}
             </div>
             <ArrowDropDown
               className={`text-xs ${!props.textDark && "text-white"}`}

@@ -7,5 +7,9 @@ export const assets = {
       active: "/assets/svg/sidebar-icons/ic_home_active.svg",
       default: "/assets/svg/sidebar-icons/ic_home_default.svg",
     },
+    artist: {
+      active: "/assets/svg/sidebar-icons/ic_artist_active.svg",
+      default: "/assets/svg/sidebar-icons/ic_artist_default.svg",
+    },
   },
 };
