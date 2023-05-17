@@ -7,14 +7,23 @@ body {
 }
 
 .brand_color_gradient {
-  background:$color-gradient-light;
+  background: $color-gradient-light;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
 .active_sidebar_link {
-  background:$color-gradient-light;
+  background: $color-gradient-light;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.MuiButtonBase-root {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
 }

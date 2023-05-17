@@ -1,11 +1,19 @@
 import React from "react";
-import { Sidebar } from "./components/molecules/Sidebar";
+import { Route, Routes } from "react-router-dom";
+import { LoginPage } from "./pages/auth/LoginPage";
+import Main from "./pages/Main";
 
 function App() {
+  const isAuth = true;
   return (
-    <div className="flex  min-h-screen">
-      <Sidebar />
-      <h1>HELLO WORLD</h1>
+    <div className="flex">
+      {isAuth ? (
+        <Main />
+      ) : (
+        <Routes>
+          <Route path={"/auth/login"} element={<LoginPage />} />
+        </Routes>
+      )}
     </div>
   );
 }

@@ -10,8 +10,8 @@ export const ColorVariables = {
     },
   },
   primary: {
-    main: "#DB2777",
-    light: "#EC4899",
+    main: "#b3115a",
+    light: "#cc1770",
     dark: "#9D174D",
   },
 };
