@@ -3,7 +3,7 @@ import { Sidebar } from "./components/molecules/Sidebar";
 
 function App() {
   return (
-    <div className="flex items-center">
+    <div className="flex  min-h-screen">
       <Sidebar />
       <h1>HELLO WORLD</h1>
     </div>

@@ -1,5 +1,20 @@
+@import "variable";
+
 body {
   max-height: 100vh;
   color: white;
-  background: linear-gradient(91.64deg, #20010c 2.79%, #00092D 97.54%);
+  background: $color-gradient-dark;
+}
+
+.brand_color_gradient {
+  background:$color-gradient-light;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.active_sidebar_link {
+  background:$color-gradient-light;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

@@ -5,7 +5,7 @@ export const ColorVariables = {
   },
   system: {
     dark: {
-      primary: "#1F1F2B",
+      primary: "#01092D",
       secondary: "#2B2B3E",
     },
   },

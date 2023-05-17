@@ -4,6 +4,7 @@ import { themeConfig } from "./config/theme.config";
 import { ThemeProvider } from "@mui/material";
 import App from "./App";
 import "./styles/index.scss";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={themeConfig}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ThemeProvider>
   </React.StrictMode>
 );
