@@ -5,6 +5,10 @@ import { ThemeProvider } from "@mui/material";
 import App from "./App";
 import "./styles/index.scss";
 import { BrowserRouter } from "react-router-dom";
+import { ENV } from "./constants/env";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import storeRedux from "./redux/store";
+import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -12,10 +16,14 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={themeConfig}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ThemeProvider>
+    <Provider store={storeRedux}>
+      <ThemeProvider theme={themeConfig}>
+        <BrowserRouter>
+          <GoogleOAuthProvider clientId={ENV.GOOGLE_ID ?? ""}>
+            <App />
+          </GoogleOAuthProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );
