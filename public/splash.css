@@ -80,3 +80,11 @@ body {
         stroke-dashoffset: -124;
     }
 }
+
+:root {
+    --ck-color-base-background: rgba(0, 0, 0, 0.5) !important;
+    --ck-color-base-foreground: #1e0000 !important;
+    --ck-color-toolbar-background: rgba(0, 0, 0, 0.3) !important;
+    --ck-color-toolbar-foreground: #023af3 !important;
+    --ck-color-text: #ffffff !important;
+}

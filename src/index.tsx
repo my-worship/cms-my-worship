@@ -9,6 +9,7 @@ import { ENV } from "./constants/env";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import storeRedux from "./redux/store";
 import { Provider } from "react-redux";
+import { SnackbarProvider } from "notistack";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -18,11 +19,13 @@ root.render(
   <React.StrictMode>
     <Provider store={storeRedux}>
       <ThemeProvider theme={themeConfig}>
-        <BrowserRouter>
-          <GoogleOAuthProvider clientId={ENV.GOOGLE_ID ?? ""}>
-            <App />
-          </GoogleOAuthProvider>
-        </BrowserRouter>
+        <SnackbarProvider maxSnack={3}>
+          <BrowserRouter>
+            <GoogleOAuthProvider clientId={ENV.GOOGLE_ID ?? ""}>
+              <App />
+            </GoogleOAuthProvider>
+          </BrowserRouter>
+        </SnackbarProvider>
       </ThemeProvider>
     </Provider>
   </React.StrictMode>

@@ -27,4 +27,20 @@ export class AuthActions extends BaseActions {
         });
     };
   }
+
+  public loginGoogle(token: string) {
+    return async (dispatch: Dispatch) => {
+      dispatch(this.auth.login({ data: undefined, loading: true }));
+      await this.httpService
+        .POST<any>(this.url.login_google(), { token: token })
+        .then((res: BaseResponse<ILoginResponse>) => {
+          this.authService.successLogin(res.data.response_data.access_token);
+          this.auth.login({ data: true, loading: false });
+        })
+        .catch((e) => {
+          this.errorService.swallApiError(e);
+          this.auth.login({ data: undefined, loading: false });
+        });
+    };
+  }
 }

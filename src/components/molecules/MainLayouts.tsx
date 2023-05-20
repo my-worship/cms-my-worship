@@ -1,4 +1,5 @@
 import { Sidebar } from "./Sidebar";
+import React from "react";
 
 export function MainLayouts(props: IProps) {
   return (

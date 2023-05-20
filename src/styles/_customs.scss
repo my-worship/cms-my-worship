@@ -1,7 +1,13 @@
 @import "variable";
 
+.ck-editor {
+  background-color: #222;
+  color: #fff;
+}
 
-
+.ck-editor__editable{
+  min-height: 300px !important;
+}
 .brand_color_gradient {
   background: $color-gradient-light;
   -webkit-background-clip: text;

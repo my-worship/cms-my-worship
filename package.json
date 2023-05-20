@@ -2,7 +2,15 @@
   "name": "cms-my-worship",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^37.1.0",
+    "@ckeditor/ckeditor5-react": "^6.0.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@faker-js/faker": "^8.0.1",
@@ -36,12 +44,7 @@
     "web-vitals": "^2.1.4",
     "yup": "^1.1.1"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+
   "eslintConfig": {
     "extends": [
       "react-app",

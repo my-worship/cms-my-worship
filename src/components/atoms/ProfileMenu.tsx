@@ -10,6 +10,7 @@ import React from "react";
 import { ArrowDropDown, Logout } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import { fakeImage } from "../../helper/fake-data-helper";
+import AuthServices from "../../services/AuthService";
 
 interface IProfileMenu {
   textDark?: boolean;
@@ -17,8 +18,12 @@ interface IProfileMenu {
 
 export const ProfileMenu = (props: IProfileMenu) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
+  const authService = new AuthServices();
   const open = Boolean(anchorEl);
+
+  function onLogout() {
+    authService.Logout().then();
+  }
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -69,7 +74,7 @@ export const ProfileMenu = (props: IProfileMenu) => {
         </MenuItem>
         <Divider />
 
-        <MenuItem>
+        <MenuItem onClick={onLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

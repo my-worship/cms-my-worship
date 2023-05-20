@@ -10,4 +10,8 @@ export class StringRoutes {
   public artist() {
     return "/artist";
   }
+
+  public requestArtist() {
+    return "/artist/request";
+  }
 }
