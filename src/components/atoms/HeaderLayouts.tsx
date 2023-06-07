@@ -1,8 +1,8 @@
 import React from "react";
 import { IBreadCrumbList } from "../../utilities/type-utils";
-import { BreadcrumbComponents } from "./BreadcrumbComponent";
 import { ProfileMenu } from "./ProfileMenu";
 import { MainCard } from "./MainCard";
+import { BreadcrumbComponents } from "./BreadcrumbComponent";
 
 export function HeaderLayouts(props: IProps) {
   return (

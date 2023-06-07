@@ -40,7 +40,7 @@ export const InputSearch = (props: IProps): ReactElement => {
     <div className="w-96">
       <label
         htmlFor="default-search"
-        className="mb-2 text-sm font-medium text-white sr-only"
+        className="mb-2 text-sm font-medium  sr-only"
       >
         Search
       </label>
@@ -68,7 +68,7 @@ export const InputSearch = (props: IProps): ReactElement => {
           id="default-search"
           value={value}
           onChange={(e: any) => setValue(e.target.value)}
-          className="block p-4 py-2 pl-10 pr-[56px]  w-full text-sm text-gray-200 bg-gray-900/50 rounded-full border border-gray-800 outline-0  focus:border-primary-main"
+          className="block p-4 py-2 pl-10 pr-[56px]  w-full text-sm   rounded-full border border-gray-800 outline-0  focus:border-primary-main"
           placeholder={props.placeholder}
           required
         />

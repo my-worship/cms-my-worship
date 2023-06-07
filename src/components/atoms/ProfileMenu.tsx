@@ -109,11 +109,11 @@ export const ProfileMenu = (props: IProfileMenu) => {
                 src={fakeImage(300, 300)}
               />
             </div>
-            <div className={`text-xs ${!props.textDark && "text-white"}`}>
+            <div className={`text-xs ${props.textDark && "text-white"}`}>
               {"RIVO PELU"}
             </div>
             <ArrowDropDown
-              className={`text-xs ${!props.textDark && "text-white"}`}
+              className={`text-xs ${props.textDark && "text-white"}`}
             />
           </IconButton>
         </Tooltip>

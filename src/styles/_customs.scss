@@ -1,9 +1,6 @@
 @import "variable";
 
-.ck-editor {
-  background-color: #222;
-  color: #fff;
-}
+
 
 .ck-editor__editable{
   min-height: 300px !important;
@@ -28,4 +25,5 @@
   justify-content: center !important;
   border-radius: 10px !important;
   font-weight: 700 !important;
+  box-shadow: none !important;
 }

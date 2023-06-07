@@ -40,11 +40,7 @@ export function Sidebar() {
   return (
     <div>
       <div className={"w-[300px]"}></div>
-      <div
-        className={
-          "bg-system-dark-primary/40 backdrop-blur-lg h-screen fixed w-[300px]"
-        }
-      >
+      <div className={"bg-white h-screen fixed w-[300px]"}>
         <div className={"px-3 py-7 flex flex-col h-full  justify-between"}>
           <div className={"h-full"}>
             <div className={"px-8"}>
@@ -55,7 +51,7 @@ export function Sidebar() {
                 {navbarList.map((item, i) => (
                   <li key={i}>
                     <Link
-                      className={`text-white flex items-center w-full  hover:bg-slate-600/10 px-5 rounded-md text-xl font-semibold py-2 ${
+                      className={`flex items-center w-full  hover:bg-slate-600/10 px-5 rounded-md text-xl font-semibold py-2 ${
                         item.path.split("/")[1] === currentPath
                           ? "border border-primary-main/20"
                           : ""

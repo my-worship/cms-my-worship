@@ -2,7 +2,6 @@ body {
     margin: 0;
     padding: 0;
     max-height: 100vh;
-    color: white;
 }
 
 
@@ -16,7 +15,6 @@ body {
     justify-content: center;
     flex-direction: column;
     background: transparent;
-    background: linear-gradient(91.64deg, #20010c 2.79%, #00092D 97.54%);
 }
 
 #splash-screen img {
@@ -79,12 +77,4 @@ body {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -124;
     }
-}
-
-:root {
-    --ck-color-base-background: rgba(0, 0, 0, 0.5) !important;
-    --ck-color-base-foreground: #1e0000 !important;
-    --ck-color-toolbar-background: rgba(0, 0, 0, 0.3) !important;
-    --ck-color-toolbar-foreground: #023af3 !important;
-    --ck-color-text: #ffffff !important;
 }
