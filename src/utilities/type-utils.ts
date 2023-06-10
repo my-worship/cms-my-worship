@@ -1,4 +1,5 @@
 import { PayloadAction } from "@reduxjs/toolkit";
+import { IResultPaginatedData } from "./base-response";
 
 export interface IBreadCrumbList {
   label: string;
@@ -22,11 +23,13 @@ export type IFileType = "IMAGE" | "VIDEO" | "";
 export const defaultPaginatedData: IPaginatedParams = {
   page: 0,
   size: 6,
+  total_data: 0,
 };
 
 export interface IPaginatedParams {
   page: number;
   size: number;
+  total_data: number;
   sort?: string;
 }
 
@@ -100,10 +103,17 @@ export interface IFileDetail {
 }
 
 export type BasePayload<T> = PayloadAction<IBasePayload<T>>;
+export type BasePayloadPaginated<T> = PayloadAction<IBasePayloadPaginated<T>>;
 
 interface IBasePayload<T> {
   data?: T;
   loading?: boolean;
+}
+
+interface IBasePayloadPaginated<T> {
+  data?: T;
+  loading?: boolean;
+  paginated_data?: IResultPaginatedData;
 }
 
 export interface IPayloadData<T> {
@@ -111,7 +121,15 @@ export interface IPayloadData<T> {
   loading?: boolean;
 }
 
+export interface IPayloadDataPaginated<T> {
+  data?: T;
+  paginated_data?: IResultPaginatedData;
+  loading?: boolean;
+}
+
 export interface IPayloadSuccess {
   success?: boolean;
   loading?: boolean;
 }
+
+export type TypeArtistStatus = "all" | "pending" | "need-revision" | "draf";

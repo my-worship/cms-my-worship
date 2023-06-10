@@ -12,10 +12,7 @@ const Body = ({
   const LoadingComp = () => (
     <>
       {Array.from({ length: 5 }).map((_, i) => (
-        <tr
-          key={i}
-          className="bg-white border-b  h-full table_row border-base border-t-[16px]"
-        >
+        <tr key={i} className="bg-white   h-full table_row border-base ">
           {col.map((c, i) => (
             <td key={i} className={`${c.paddingNone ? "p-0" : "py-4 px-6"}`}>
               {col.map((e, i) => {
@@ -45,10 +42,7 @@ const Body = ({
                 data.map((item, i) => (
                   <tr
                     key={i}
-                    className={`bg-white border-b  h-full table_row border-base border-t-[16px] duration-500  ${
-                      onclick !== undefined &&
-                      "cursor-pointer hover:hover:bg-primary-400/5"
-                    }`}
+                    className={`bg-white   h-full table_row border-b duration-500`}
                   >
                     {col.map((c, i) => (
                       <td

@@ -17,6 +17,7 @@ export default class QueryParamsHelper {
         page: parseInt(result.page),
         size: parseInt(result.size),
         sort: result.sort,
+        total_data: parseInt(result.total_data),
       };
     } else {
       return defaultPaginatedData;

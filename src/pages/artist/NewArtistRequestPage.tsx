@@ -25,7 +25,6 @@ export function NewArtistRequestPage() {
   const stringRoutes = new StringRoutes();
 
   useEffect(() => {
-    console.log(Artist.createArtist);
     if (Artist.createArtist) {
       uiService.handleSnackbarSuccess("Artist Success Requested");
       navigate(stringRoutes.artist());

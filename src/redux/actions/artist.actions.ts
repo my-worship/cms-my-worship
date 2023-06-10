@@ -4,10 +4,34 @@ import { ArtistSlice } from "../reducers/artist.reducers";
 import { IRequestNewArtist } from "../../model/request/IRequestNewArtist";
 import { Dispatch } from "redux";
 import { ActionsInitTypeEnum } from "../../enums/actions-init-type-enum";
+import { TypeArtistStatus } from "../../utilities/type-utils";
+import { BaseResponsePaginated } from "../../utilities/base-response";
+import { IResListArtist } from "../../model/response/IResListArtist";
 
 export class ArtistActions extends BaseActions {
   private url = endpoint.artist;
   private artist = ArtistSlice.actions;
+
+  public getListArtist(status: TypeArtistStatus) {
+    return async (dispatch: Dispatch) => {
+      dispatch(this.artist.listArtist({ loading: true, data: undefined }));
+      await this.httpService
+        .GET(this.url.getListArtist(status))
+        .then((res: BaseResponsePaginated<IResListArtist[]>) => {
+          dispatch(
+            this.artist.listArtist({
+              loading: false,
+              data: res.data.response_data,
+              paginated_data: res.data.pagination_data,
+            })
+          );
+        })
+        .catch((e) => {
+          this.errorService.fetchApiError(e);
+          dispatch(this.artist.listArtist({ loading: false, data: undefined }));
+        });
+    };
+  }
 
   public createArtist(data: IRequestNewArtist) {
     return async (dispatch: Dispatch) => {
