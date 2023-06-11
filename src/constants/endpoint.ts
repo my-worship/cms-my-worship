@@ -7,7 +7,7 @@ export const endpoint = {
   },
   artist: {
     create_artist: () => `/cms/artist/v1/new`,
-    getListArtist: (status: TypeArtistStatus) =>
-      `/cms/artist/v1/list/${status}`,
+    getListArtist: (status: TypeArtistStatus, param?: string) =>
+      `/cms/artist/v1/list/${status}` + param,
   },
 };

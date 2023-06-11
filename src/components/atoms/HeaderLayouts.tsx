@@ -13,9 +13,13 @@ export function HeaderLayouts(props: IProps) {
           <BreadcrumbComponents BreadcrumbList={props.breadcrumbData} />
         )}
       </div>
-      <div>
-        <ProfileMenu />
-      </div>
+      {props?.rightContent ? (
+        <div>
+          <div>{props?.rightContent}</div>
+        </div>
+      ) : (
+        <div>{!props.disableProfileButton && <ProfileMenu />}</div>
+      )}
     </MainCard>
   );
 }
@@ -23,4 +27,6 @@ export function HeaderLayouts(props: IProps) {
 interface IProps {
   title: string;
   breadcrumbData?: IBreadCrumbList[];
+  rightContent?: any;
+  disableProfileButton?: boolean;
 }

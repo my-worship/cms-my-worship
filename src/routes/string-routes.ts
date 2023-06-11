@@ -11,6 +11,10 @@ export class StringRoutes {
     return "/artist";
   }
 
+  public detailArtist(slug: string) {
+    return "/artist/detail/" + slug;
+  }
+
   public requestArtist() {
     return "/artist/request";
   }

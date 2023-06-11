@@ -45,6 +45,13 @@ export const Paginated = (props: IProps) => {
 
   function handlePageClick(e: any) {
     setPage(e.selected);
+    if (props.onChange) {
+      props.onChange({
+        page: e.selected,
+        size: size,
+        total_data: resultValue.total_data,
+      });
+    }
   }
 
   useEffect(() => {
@@ -56,8 +63,10 @@ export const Paginated = (props: IProps) => {
   }, [page, size]);
 
   useEffect(() => {
-    if (props.onChange) {
-      props.onChange(resultValue);
+    if (resultValue.total_data !== 0) {
+      if (props.onChange) {
+        props.onChange(resultValue);
+      }
     }
   }, [resultValue]);
 

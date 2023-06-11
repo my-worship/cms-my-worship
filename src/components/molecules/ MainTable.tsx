@@ -1,83 +1,55 @@
 import React, { Fragment, useState } from "react";
 import { IconButton, Skeleton } from "@mui/material";
 import { FilterList } from "@mui/icons-material";
+import { MainCard } from "../atoms/MainCard";
+import { Col } from "../atoms/Col";
+import { LoadingSpinner } from "../atoms/LoadingSpiner";
 
-const Body = ({
-  data,
-  col,
-  isLoading,
-  onClick,
-  disableOnClickIndex,
-}: IPropsBody) => {
-  const LoadingComp = () => (
-    <>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <tr key={i} className="bg-white   h-full table_row border-base ">
-          {col.map((c, i) => (
-            <td key={i} className={`${c.paddingNone ? "p-0" : "py-4 px-6"}`}>
-              {col.map((e, i) => {
-                if (e.key === c.key) {
-                  return (
-                    <Fragment key={i}>
-                      {e.loadingComponents ?? <Skeleton variant={"text"} />}
-                    </Fragment>
-                  );
-                }
-              })}
-            </td>
-          ))}
-        </tr>
-      ))}
-    </>
-  );
+const Body = ({ data, col, onClick, disableOnClickIndex }: IPropsBody) => {
   return (
     <>
       <tbody className="h-full">
-        {isLoading ? (
-          LoadingComp()
-        ) : (
-          <>
-            {data ? (
-              data.length > 0 ? (
-                data.map((item, i) => (
-                  <tr
-                    key={i}
-                    className={`bg-white   h-full table_row border-b duration-500`}
-                  >
-                    {col.map((c, i) => (
-                      <td
-                        key={i}
-                        className={`${c.paddingNone ? "p-0" : "py-4 px-6"} ${
-                          c.className ?? ""
-                        }`}
-                        onClick={() =>
-                          onClick && i !== disableOnClickIndex
-                            ? onClick(item)
-                            : null
+        <>
+          {data ? (
+            data.length > 0 ? (
+              data.map((item, i) => (
+                <tr
+                  key={i}
+                  className={`bg-white   h-full table_row border-b duration-500`}
+                >
+                  {col.map((c, i) => (
+                    <td
+                      key={i}
+                      className={`${c.paddingNone ? "p-0" : "py-4 px-6"} ${
+                        c.className ?? ""
+                      }`}
+                      onClick={() =>
+                        onClick && i !== disableOnClickIndex
+                          ? onClick(item)
+                          : null
+                      }
+                    >
+                      {col.map((e, i) => {
+                        if (e.key === c.key) {
+                          return (
+                            <Fragment key={i}>
+                              {item[e.value ?? ""]}
+                              {e.layouts && e.layouts(item)}
+                            </Fragment>
+                          );
                         }
-                      >
-                        {col.map((e, i) => {
-                          if (e.key === c.key) {
-                            return (
-                              <Fragment key={i}>
-                                {item[e.value ?? ""]}
-                                {e.layouts && e.layouts(item)}
-                              </Fragment>
-                            );
-                          }
-                        })}
-                      </td>
-                    ))}
-                  </tr>
-                ))
-              ) : (
-                <></>
-              )
+                      })}
+                    </td>
+                  ))}
+                </tr>
+              ))
             ) : (
               <></>
-            )}
-          </>
-        )}
+            )
+          ) : (
+            <></>
+          )}
+        </>
       </tbody>
     </>
   );
@@ -119,68 +91,87 @@ export const MainTable = (props: ITableProps) => {
     }
   }
 
-  return (
-    <div className={"overflow-x-auto"}>
-      <table
-        className={` text-sm text-left text-gray-500 table-auto w-full  ${props?.className}`}
-      >
-        {!props.hideHeader && (
-          <thead className="text-xs text-gray-700 uppercase  border-b">
-            <tr>
-              {props.count && (
-                <th
-                  scope="col"
-                  className="py-3 px-6 bg-white  border-transparent"
-                >
-                  No
-                </th>
-              )}
-              {props.column.map((item: any) => (
-                <th
-                  key={item.headerTitle}
-                  scope="col"
-                  className={`py-3 px-6 bg-white w-fit  border ${item.headerClassName}`}
-                >
-                  <div className={"flex items-center justify-between"}>
-                    {props.isLoading ? (
-                      <div className={"w-full"}>
-                        <Skeleton height={24} width={"90%"} variant={"text"} />
-                      </div>
-                    ) : (
-                      item.headerTitle ?? ""
-                    )}
-                    {item?.sort && (
-                      <>
-                        {props.isLoading ? (
-                          <Skeleton height={16} width={16} />
-                        ) : (
-                          <div
-                            onClick={() => item.onSort(handleCekSort(item.key))}
-                          >
-                            <IconButton>
-                              <FilterList />
-                            </IconButton>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-        )}
+  if (props.isLoading) {
+    return (
+      <MainCard>
+        <Col className={"h-96"} justify={"center"} itemsAlign={"center"}>
+          <Col justify={"center"} itemsAlign={"center"} gap={"lg"}>
+            <LoadingSpinner />
+            <h1>LOADING</h1>
+          </Col>
+        </Col>
+      </MainCard>
+    );
+  } else {
+    return (
+      <div className={"overflow-x-auto"}>
+        <table
+          className={` text-sm text-left text-gray-500 table-auto w-full  ${props?.className}`}
+        >
+          {!props.hideHeader && (
+            <thead className="text-xs text-gray-700 uppercase  border-b">
+              <tr>
+                {props.count && (
+                  <th
+                    scope="col"
+                    className="py-3 px-6 bg-white  border-transparent"
+                  >
+                    No
+                  </th>
+                )}
+                {props.column.map((item: any) => (
+                  <th
+                    key={item.headerTitle}
+                    scope="col"
+                    className={`py-3 px-6 bg-white w-fit  border ${item.headerClassName}`}
+                  >
+                    <div className={"flex items-center justify-between"}>
+                      {props.isLoading ? (
+                        <div className={"w-full"}>
+                          <Skeleton
+                            height={24}
+                            width={"90%"}
+                            variant={"text"}
+                          />
+                        </div>
+                      ) : (
+                        item.headerTitle ?? ""
+                      )}
+                      {item?.sort && (
+                        <>
+                          {props.isLoading ? (
+                            <Skeleton height={16} width={16} />
+                          ) : (
+                            <div
+                              onClick={() =>
+                                item.onSort(handleCekSort(item.key))
+                              }
+                            >
+                              <IconButton>
+                                <FilterList />
+                              </IconButton>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+          )}
 
-        <Body
-          disableOnClickIndex={props.disableOnClickIndex}
-          onClick={props.onClick}
-          isLoading={props?.isLoading}
-          data={props?.data}
-          col={props.column}
-        />
-      </table>
-    </div>
-  );
+          <Body
+            disableOnClickIndex={props.disableOnClickIndex}
+            onClick={props.onClick}
+            isLoading={props?.isLoading}
+            data={props?.data}
+            col={props.column}
+          />
+        </table>
+      </div>
+    );
+  }
 };
 
 export interface ITableColumnData {

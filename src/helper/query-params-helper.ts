@@ -37,7 +37,11 @@ export default class QueryParamsHelper {
     }
   }
 
-  getUrlParsing(onGoingParameter: string, value: string, parameter: any) {
+  private getUrlParsing(
+    onGoingParameter: string,
+    value: string,
+    parameter: any
+  ) {
     if (parameter !== undefined) {
       if (parameter !== null) {
         if (parameter !== "") {

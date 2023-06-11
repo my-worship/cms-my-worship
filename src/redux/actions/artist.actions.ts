@@ -12,11 +12,11 @@ export class ArtistActions extends BaseActions {
   private url = endpoint.artist;
   private artist = ArtistSlice.actions;
 
-  public getListArtist(status: TypeArtistStatus) {
+  public getListArtist(status: TypeArtistStatus, param?: string) {
     return async (dispatch: Dispatch) => {
       dispatch(this.artist.listArtist({ loading: true, data: undefined }));
       await this.httpService
-        .GET(this.url.getListArtist(status))
+        .GET(this.url.getListArtist(status, param))
         .then((res: BaseResponsePaginated<IResListArtist[]>) => {
           dispatch(
             this.artist.listArtist({

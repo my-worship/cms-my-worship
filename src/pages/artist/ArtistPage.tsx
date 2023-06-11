@@ -11,27 +11,38 @@ import {
 import { ArtistActions } from "../../redux/actions/artist.actions";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { IResListArtist } from "../../model/response/IResListArtist";
-import { fakeImage } from "../../helper/fake-data-helper";
-import { Chip } from "@mui/material";
+import { Avatar, Chip } from "@mui/material";
 import { IconBtnWithTooltip } from "../../components/atoms/IconBtnWithTooltip";
 import { Info } from "@mui/icons-material";
 import { Paginated } from "../../components/atoms/Paginated";
-import { defaultPaginatedData } from "../../utilities/type-utils";
+import {
+  defaultPaginatedData,
+  IPaginatedParams,
+} from "../../utilities/type-utils";
 import { IResultPaginatedData } from "../../utilities/base-response";
+import { DateHelper } from "../../helper/date-helper";
+import QueryParamsHelper from "../../helper/query-params-helper";
 
 export function ArtistPage() {
   const [paginatedData, setPaginatedData] =
     useState<IResultPaginatedData>(defaultPaginatedData);
 
   const stringRoutes = new StringRoutes();
-  const navigate = useNavigate();
   const artistActions = new ArtistActions();
+  const dateHelper = new DateHelper();
+  const queryParamsHelper = new QueryParamsHelper();
+
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { Artist } = useAppSelector((state) => state);
 
   useEffect(() => {
-    dispatch(artistActions.getListArtist("all")).then();
+    fetchDataList();
   }, []);
+
+  function fetchDataList(param?: string) {
+    dispatch(artistActions.getListArtist("all", param)).then();
+  }
 
   useEffect(() => {
     if (Artist?.listArtist?.paginated_data) {
@@ -39,17 +50,53 @@ export function ArtistPage() {
     }
   }, [Artist.listArtist]);
 
+  function onChangePagination(e: IPaginatedParams) {
+    const param = queryParamsHelper.getUrlParsingValue(e);
+    fetchDataList(param);
+    navigate({ search: param });
+  }
+
   const tableColumnData: ITableColumnData[] = [
-    { key: "Image", headerTitle: "Image", layouts: uiImage },
+    {
+      key: "Image",
+      headerTitle: "Image",
+      layouts: uiImage,
+      headerClassName: "w-[5%]",
+    },
     { key: "title", headerTitle: "Title", layouts: uiTitle },
-    { key: "status", headerTitle: "Status", layouts: uiStatus },
-    { key: "actions", headerTitle: "Actions", layouts: uiActions },
+    { key: "created_at", headerTitle: "Created Date", layouts: uiDate },
+    {
+      key: "status",
+      headerTitle: "Status",
+      layouts: uiStatus,
+      headerClassName: "w-[10%]",
+    },
+    {
+      key: "actions",
+      headerTitle: "Actions",
+      layouts: uiActions,
+      headerClassName: "w-[5%]",
+    },
   ];
 
-  function uiActions() {
+  function uiActions(e: IResListArtist) {
     return (
       <div>
-        <IconBtnWithTooltip label={"Details"} icon={<Info />} />
+        <IconBtnWithTooltip
+          onClick={() => navigate(stringRoutes.detailArtist(e.slug))}
+          label={"Details"}
+          icon={<Info />}
+        />
+      </div>
+    );
+  }
+
+  function uiDate(e: IResListArtist) {
+    return (
+      <div>
+        {e.created_at
+          ? dateHelper.toFormatDate(e.created_at, "yyyy-MM-dd - HH:mm")
+          : "-"}
       </div>
     );
   }
@@ -65,11 +112,7 @@ export function ArtistPage() {
   function uiImage(e: IResListArtist) {
     return (
       <div>
-        <img
-          style={{ width: 100, height: 100, objectFit: "cover" }}
-          src={fakeImage(400, 600)}
-          alt={e.name}
-        />
+        <Avatar src={e?.image} />
       </div>
     );
   }
@@ -94,11 +137,12 @@ export function ArtistPage() {
 
       <div>
         <MainTable
+          isLoading={Artist?.listArtist?.loading}
           data={Artist?.listArtist?.data ?? []}
           column={tableColumnData}
         />
         <Paginated
-          onChange={(e) => console.log("ini e paginated", e)}
+          onChange={(e) => onChangePagination(e)}
           dataPaginated={paginatedData}
         />
       </div>

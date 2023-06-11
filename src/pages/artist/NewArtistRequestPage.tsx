@@ -49,6 +49,7 @@ export function NewArtistRequestPage() {
         name: value.name,
         notes: value.notes ? value.notes : undefined,
         description: value.description,
+        image: value?.image ? value?.image : undefined,
       };
       dispatch(artistActions.createArtist(data)).then();
     },
@@ -71,7 +72,9 @@ export function NewArtistRequestPage() {
           </div>
           <div className={"grid gap-6"}>
             <div className={"w-full h-40"}>
-              <FileUploadAreaBox onChange={(e) => console.log(e)} />
+              <FileUploadAreaBox
+                onChange={(e) => formik.setFieldValue("image", e)}
+              />
             </div>
             <InputText
               label={"Artist Name"}

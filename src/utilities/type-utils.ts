@@ -22,7 +22,7 @@ export type IFileType = "IMAGE" | "VIDEO" | "";
 
 export const defaultPaginatedData: IPaginatedParams = {
   page: 0,
-  size: 6,
+  size: 10,
   total_data: 0,
 };
 
