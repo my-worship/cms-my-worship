@@ -26,10 +26,11 @@ export default class QueryParamsHelper {
 
   getUrlParsingValue(value: any) {
     if (value) {
-      const { page, size, keyword, sort, paymentStatus } = value;
+      const { page, size, keyword, sort, paymentStatus, search } = value;
       let param = "";
       param = this.getUrlParsing(param, "page", page);
       param = this.getUrlParsing(param, "size", size);
+      param = this.getUrlParsing(param, "search", search);
       param = this.getUrlParsing(param, "sort", sort);
       param = this.getUrlParsing(param, "keyword", keyword);
       param = this.getUrlParsing(param, "paymentStatus", paymentStatus);

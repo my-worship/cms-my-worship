@@ -15,4 +15,7 @@ export const assets = {
       default: "/assets/svg/sidebar-icons/ic_artist_default.svg",
     },
   },
+  illustration: {
+    il_question: "/assets/illustration/il_question.svg",
+  },
 };

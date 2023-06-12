@@ -6,7 +6,10 @@ export class UiServices {
   public handleSnackbarSuccess(message: string) {
     this.enqueueSnackbar.enqueueSnackbar(message, {
       variant: "success",
-      anchorOrigin: { horizontal: "right", vertical: "bottom" },
+      style: {
+        width: 700,
+      },
+      anchorOrigin: { horizontal: "center", vertical: "top" },
     });
   }
 }

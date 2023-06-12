@@ -31,6 +31,7 @@ export const InputSearch = (props: IProps): ReactElement => {
 
   const onResetSearch = () => {
     setValue("");
+
     if (props.onSearch && props.onReset) {
       props.onSearch("");
       props.onReset("");
@@ -40,7 +41,7 @@ export const InputSearch = (props: IProps): ReactElement => {
     <div className="w-96">
       <label
         htmlFor="default-search"
-        className="mb-2 text-sm font-medium  sr-only"
+        className="mb-2 text-sm font-medium text-gray-900 sr-only"
       >
         Search
       </label>
@@ -68,17 +69,19 @@ export const InputSearch = (props: IProps): ReactElement => {
           id="default-search"
           value={value}
           onChange={(e: any) => setValue(e.target.value)}
-          className="block p-4 py-2 pl-10 pr-[56px]  w-full text-sm   rounded-full border border-gray-800 outline-0  focus:border-primary-main"
+          className="block p-4 py-2 pl-10 pr-[56px]  w-full text-sm text-gray-900 bg-gray-50 rounded-full border border-gray-300 outline-0  focus:border-primary-main"
           placeholder={props.placeholder}
           required
         />
-        <button
-          type="submit"
-          onClick={props.isActiveSearch ? onResetSearch : onEnter}
-          className="absolute right-[5px] bottom-[5px]  outline-none focus:border-primary-500 ring-0   font-medium rounded-full text-sm px-4 py-1 "
-        >
-          {props.isActiveSearch && <Close fontSize={"small"} />}
-        </button>
+        {props.isActiveSearch && (
+          <button
+            type="submit"
+            onClick={props.isActiveSearch ? onResetSearch : onEnter}
+            className="absolute right-[5px] bottom-[5px]  outline-none focus:border-primary-500 ring-0   font-medium rounded-full text-sm px-4 py-1 "
+          >
+            {<Close fontSize={"small"} />}
+          </button>
+        )}
       </div>
     </div>
   );

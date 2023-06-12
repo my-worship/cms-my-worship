@@ -26,6 +26,8 @@ import QueryParamsHelper from "../../helper/query-params-helper";
 export function ArtistPage() {
   const [paginatedData, setPaginatedData] =
     useState<IResultPaginatedData>(defaultPaginatedData);
+  const [searchValue, setSearchValue] = useState<string>();
+  const [isActiveSearch, setIsActiveSearch] = useState<boolean>(false);
 
   const stringRoutes = new StringRoutes();
   const artistActions = new ArtistActions();
@@ -42,6 +44,22 @@ export function ArtistPage() {
 
   function fetchDataList(param?: string) {
     dispatch(artistActions.getListArtist("all", param)).then();
+  }
+
+  function onSearchFunction(e: string) {
+    setSearchValue(e);
+    setIsActiveSearch(true);
+    const param = queryParamsHelper.getUrlParsingValue({
+      search: e,
+      ...paginatedData,
+    });
+    fetchDataList(param);
+    navigate({ search: param });
+  }
+
+  function onResetSearch() {
+    setSearchValue(undefined);
+    setIsActiveSearch(false);
   }
 
   useEffect(() => {
@@ -104,7 +122,24 @@ export function ArtistPage() {
   function uiStatus(e: IResListArtist) {
     return (
       <div>
-        <Chip color={"warning"} label={e.status_enum ?? "-"} />
+        {e.status_enum === "PENDING" && (
+          <Chip
+            color={"warning"}
+            label={e.status_string.toUpperCase() ?? "-"}
+          />
+        )}
+        {e.status_enum === "NEED_REVISION" && (
+          <Chip
+            color={"secondary"}
+            label={e.status_string.toUpperCase() ?? "-"}
+          />
+        )}
+        {e.status_enum === "PUBLISH" && (
+          <Chip
+            color={"success"}
+            label={e.status_string.toUpperCase() ?? "-"}
+          />
+        )}
       </div>
     );
   }
@@ -129,7 +164,13 @@ export function ArtistPage() {
     <div className={"w-full grid gap-5"}>
       <HeaderLayouts title={"Artist"} />
       <div className={"w-full flex items-center justify-between"}>
-        <InputSearch placeholder={"Search Artist Name.."} />
+        <InputSearch
+          values={searchValue}
+          isActiveSearch={isActiveSearch}
+          onReset={onResetSearch}
+          onSearch={onSearchFunction}
+          placeholder={"Search Artist Name.."}
+        />
         <Btn onClick={() => navigate(stringRoutes.requestArtist())}>
           Request New Artist
         </Btn>

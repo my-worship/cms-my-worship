@@ -36,6 +36,12 @@ export const ArtistSlice = createSlice({
         data: action.payload.data,
       };
     },
+    approveArtist: (state: IArtistReducers, action: BasePayload<boolean>) => {
+      state.approveArtist = {
+        data: action.payload.data,
+        loading: action.payload.loading,
+      };
+    },
   },
 });
 
@@ -43,4 +49,5 @@ export interface IArtistReducers {
   createArtist?: boolean;
   listArtist?: IPayloadDataPaginated<IResListArtist[]>;
   detailArtist?: IPayloadData<IResDetailArtist>;
+  approveArtist?: IPayloadData<boolean>;
 }

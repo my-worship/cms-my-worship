@@ -10,5 +10,6 @@ export const endpoint = {
     getListArtist: (status: TypeArtistStatus, param?: string) =>
       `/cms/artist/v1/list/${status}` + param,
     detailArtistBySlug: (slug: string) => `/cms/artist/v1/detail/${slug}`,
+    approveArtist: (slug: string) => `/cms/artist/v1/approved/${slug}`,
   },
 };

@@ -21,6 +21,10 @@ export class HttpService {
   }
 
   public PATCH(URL: string) {
-    return axios.patch(this.baseEndpoint + URL, this.HeaderSetting());
+    return axios.patch(
+      this.baseEndpoint + URL,
+      undefined,
+      this.HeaderSetting()
+    );
   }
 }

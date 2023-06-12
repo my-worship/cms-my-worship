@@ -1,3 +1,5 @@
+import { StatusEnum } from "../../enums/statusEnum";
+
 export interface IResDetailArtist {
   name: string;
   slug: string;
@@ -5,8 +7,8 @@ export interface IResDetailArtist {
   created_by?: string;
   image: string;
   request_note: string;
-  is_revision: boolean;
   revision_notes: string;
-  created_date: string;
-  publish_date: string;
+  status: StatusEnum;
+  created_date: Date;
+  publish_date: Date;
 }

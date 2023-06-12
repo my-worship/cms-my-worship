@@ -4,38 +4,44 @@ import { IBreadCrumbList } from "../../utilities/type-utils";
 import { StringRoutes } from "../../routes/string-routes";
 import { Check, Close, Edit } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { Row } from "../../components/atoms/Row";
 import { Col } from "../../components/atoms/Col";
 import { MainCard } from "../../components/atoms/MainCard";
 import { InlineColText } from "../../components/atoms/InlineColText";
 import { ArtistActions } from "../../redux/actions/artist.actions";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IResDetailArtist } from "../../model/response/IResDetailArtist";
 import { LoadingCard } from "../../components/atoms/LoadingCard";
 import { checkMappingData } from "../../helper/utils-helper";
 import { DateHelper } from "../../helper/date-helper";
 import { FormatDateConstants } from "../../constants/formatDateConstants";
+import { PopupModal } from "../../components/atoms/PopupModal";
+import { assets } from "../../constants/assets";
+import { PopupContent } from "../../components/atoms/PopupContent";
+import { UiServices } from "../../services/UiServices";
 
 export function DetailArtistPage() {
   const [dataDetail, setDataDetail] = useState<IResDetailArtist | undefined>(
     undefined
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isOpenModalApprove, setIsOpenModalApprove] = useState<boolean>(false);
 
   const stringRoutes = new StringRoutes();
   const artistActions = new ArtistActions();
   const dateHelper = new DateHelper();
-
+  const uiService = new UiServices();
   const dispatch = useAppDispatch();
   const { Artist } = useAppSelector((state) => state);
   const params = useParams();
   const slug = params?.slug;
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (slug) {
-      dispatch(artistActions.getDetailArtistBySlug(slug));
+      dispatch(artistActions.getDetailArtistBySlug(slug)).then();
     }
   }, [slug]);
 
@@ -51,13 +57,29 @@ export function DetailArtistPage() {
     if (Artist.detailArtist?.data) {
       setDataDetail(Artist?.detailArtist?.data);
     }
-  }, [Artist.detailArtist]);
+    if (Artist?.approveArtist?.data) {
+      dispatch(artistActions.resetArtistReducers()).then(() => {
+        navigate(stringRoutes.artist());
+        uiService.handleSnackbarSuccess("Artist Success Approved");
+      });
+    }
+  }, [Artist]);
 
   const breadCrumbData: IBreadCrumbList[] = [
     { path: stringRoutes.root(), label: "Home" },
     { path: stringRoutes.artist(), label: "Artist" },
     { label: "Artist Name" },
   ];
+
+  function onApproveArtist() {
+    if (slug) {
+      dispatch(artistActions.approveArtist(slug)).then();
+    }
+  }
+
+  function onCloseModalApproveFunction() {
+    setIsOpenModalApprove(false);
+  }
 
   function rightContentHeader() {
     return (
@@ -73,7 +95,11 @@ export function DetailArtistPage() {
           </Button>
         </Tooltip>
         <Tooltip arrow={true} title={"Approve"}>
-          <Button color={"success"} variant={"outlined"}>
+          <Button
+            onClick={() => setIsOpenModalApprove(true)}
+            color={"success"}
+            variant={"outlined"}
+          >
             <Check />
           </Button>
         </Tooltip>
@@ -81,8 +107,28 @@ export function DetailArtistPage() {
     );
   }
 
+  function componentModalApprove() {
+    return (
+      <div className={""}>
+        <PopupContent
+          isLoading={Artist?.approveArtist?.loading}
+          title={"Approve Artist"}
+          subTitle={"Have you checked the data clearly?"}
+          image={assets.illustration.il_question}
+        />
+      </div>
+    );
+  }
+
   return (
     <Col gap={"lg"}>
+      <PopupModal
+        isOpen={isOpenModalApprove}
+        onClose={onCloseModalApproveFunction}
+        onCancel={onCloseModalApproveFunction}
+        components={componentModalApprove()}
+        onSubmit={onApproveArtist}
+      />
       <HeaderLayouts
         rightContent={rightContentHeader()}
         breadcrumbData={breadCrumbData}
@@ -93,6 +139,15 @@ export function DetailArtistPage() {
       ) : (
         <div className={"flex  justify-between gap-4"}>
           <MainCard className={"w-1/2"}>
+            {dataDetail?.status === "NEED_REVISION" && (
+              <div className={"mb-3"}>
+                <Alert severity="info">
+                  <div className={"font-semibold"}>Need Revision</div>
+                  <p>{checkMappingData(dataDetail?.revision_notes)}</p>
+                </Alert>
+              </div>
+            )}
+
             <h1>{checkMappingData(dataDetail?.name)}</h1>
             <div className={"content_html mt-3"}>
               <div

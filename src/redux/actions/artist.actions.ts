@@ -16,6 +16,21 @@ export class ArtistActions extends BaseActions {
   private url = endpoint.artist;
   private artist = ArtistSlice.actions;
 
+  public approveArtist(slug: string) {
+    return async (dispatch: Dispatch) => {
+      dispatch(this.artist.approveArtist({ loading: true }));
+      await this.httpService
+        .PATCH(this.url.approveArtist(slug))
+        .then(() => {
+          dispatch(this.artist.approveArtist({ loading: false, data: true }));
+        })
+        .catch((e) => {
+          this.errorService.fetchApiError(e);
+          dispatch(this.artist.approveArtist({ loading: false, data: false }));
+        });
+    };
+  }
+
   public getDetailArtistBySlug(slug: string) {
     return async (dispatch: Dispatch) => {
       dispatch(this.artist.detailArtist({ data: undefined, loading: true }));
@@ -93,6 +108,9 @@ export class ArtistActions extends BaseActions {
   public resetArtistReducers() {
     return async (dispatch: Dispatch) => {
       dispatch(this.artist.createArtist({ data: undefined }));
+      dispatch(this.artist.detailArtist({ data: undefined }));
+      dispatch(this.artist.approveArtist({ data: undefined }));
+      dispatch(this.artist.listArtist({ data: undefined }));
     };
   }
 }
