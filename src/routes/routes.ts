@@ -8,7 +8,7 @@ import { DetailArtistPage } from "../pages/artist/DetailArtistPage";
 const stringRoutes = new StringRoutes();
 export const routes = [
   { path: stringRoutes.root(), components: HomePage },
-  { path: stringRoutes.artist(), components: ArtistPage },
+  { path: stringRoutes.artist(":status"), components: ArtistPage },
   { path: stringRoutes.requestArtist(), components: NewArtistRequestPage },
   { path: stringRoutes.lyrics(), components: LyricsPage },
   { path: stringRoutes.detailArtist(":slug"), components: DetailArtistPage },

@@ -1,15 +1,48 @@
 @import "variable";
 
 
-
-.ck-editor__editable{
+.ck-editor__editable {
   min-height: 300px !important;
 }
+
 .brand_color_gradient {
   background: $color-gradient-light;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.sidebar-layout {
+  .active-link {
+    border-radius: 12px !important;
+  }
+}
+
+.sidebar-layout {
+
+  .active-link {
+    background-color: #EBEFF4 !important;
+    color: $color-primary-main !important;
+  }
+
+  .list_item_sidebar {
+    margin-bottom: 10px !important;
+    color: #5A6367;
+    font-size: 14px;
+  }
+
+  .MuiButtonBase-root {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    gap: 12px !important;
+  }
+
+  .MuiListItemIcon-root {
+    min-width: 30px !important;
+  }
 }
 
 .active_sidebar_link {

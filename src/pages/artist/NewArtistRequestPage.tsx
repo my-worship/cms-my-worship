@@ -27,7 +27,7 @@ export function NewArtistRequestPage() {
   useEffect(() => {
     if (Artist.createArtist) {
       uiService.handleSnackbarSuccess("Artist Success Requested");
-      navigate(stringRoutes.artist());
+      navigate(stringRoutes.artist("pending"));
       dispatch(artistActions.resetArtistReducers()).then();
     }
   }, [Artist.createArtist]);
@@ -55,7 +55,8 @@ export function NewArtistRequestPage() {
     },
   });
   const breadcrumb: IBreadCrumbList[] = [
-    { path: stringRoutes.artist(), label: "Artist" },
+    { path: stringRoutes.artist("all"), label: "Artist" },
+    { path: stringRoutes.artist("all"), label: "All" },
     { label: "New" },
   ];
   return (

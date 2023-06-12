@@ -17,5 +17,6 @@ export const assets = {
   },
   illustration: {
     il_question: "/assets/illustration/il_question.svg",
+    il_empty_data: "/assets/illustration/il_empty_data.svg",
   },
 };

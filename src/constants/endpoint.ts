@@ -12,4 +12,7 @@ export const endpoint = {
     detailArtistBySlug: (slug: string) => `/cms/artist/v1/detail/${slug}`,
     approveArtist: (slug: string) => `/cms/artist/v1/approved/${slug}`,
   },
+  user: {
+    getMeData: () => "/cms/user/v1/get-me-data",
+  },
 };

@@ -1,3 +1,5 @@
+import { TypeArtistStatus } from "../utilities/type-utils";
+
 export class StringRoutes {
   public root() {
     return "/";
@@ -7,8 +9,8 @@ export class StringRoutes {
     return "/lyrics";
   }
 
-  public artist() {
-    return "/artist";
+  public artist(status: TypeArtistStatus | ":status") {
+    return "/artist/" + status;
   }
 
   public detailArtist(slug: string) {

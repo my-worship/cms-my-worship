@@ -1,92 +1,153 @@
 import React, { useEffect, useState } from "react";
-import { BrandLogo } from "../atoms/BrandLogo";
-import { Link, useLocation } from "react-router-dom";
-import { assets } from "../../constants/assets";
+import {
+  Collapse,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { ReactSVG } from "react-svg";
-import { StringRoutes } from "../../routes/string-routes";
+import { useLocation, useNavigate } from "react-router-dom";
+import { navbarList } from "../../constants/SidebarMenu";
+import { BrandLogo } from "../atoms/BrandLogo";
+import { ISidebarMenu } from "../../utilities/type-utils";
 
-export function Sidebar() {
-  const [currentPath, setCurrentPath] = useState<string>();
+const checkActiveSidebar = (path: string): string => {
+  const splitPath = path.split("/");
+  return splitPath[1];
+};
+const checkActiveSidebarChild = (path: string): string => {
+  const splitPath = path.split("/");
+  return splitPath[2];
+};
 
-  const location = useLocation();
-  const stringRoutes = new StringRoutes();
+function hasChildren(item: any) {
+  const { items: children } = item;
+  if (children === undefined) {
+    return false;
+  }
+  if (children.constructor !== Array) {
+    return false;
+  }
+  return children.length !== 0;
+}
 
-  useEffect(() => {
-    const loc = location.pathname.split("/")[1];
-    setCurrentPath(loc);
-  }, [location.pathname]);
-
-  const navbarList = [
-    {
-      title: "Home",
-      path: stringRoutes.root(),
-      iconDefault: assets.sidebar_icon.home.default,
-      iconActive: assets.sidebar_icon.home.active,
-    },
-    {
-      title: "Lyrics",
-      path: stringRoutes.lyrics(),
-      iconDefault: assets.sidebar_icon.home.default,
-      iconActive: assets.sidebar_icon.home.active,
-    },
-    {
-      title: "Artist",
-      path: stringRoutes.artist(),
-      iconDefault: assets.sidebar_icon.artist.default,
-      iconActive: assets.sidebar_icon.artist.active,
-    },
-  ];
-
+export const Sidebar = () => {
   return (
     <div>
-      <div className={"w-[300px]"}></div>
-      <div className={"bg-white h-screen fixed w-[300px]"}>
-        <div className={"px-3 py-7 flex flex-col h-full  justify-between"}>
-          <div className={"h-full"}>
-            <div className={"px-8"}>
-              <BrandLogo />
-            </div>
-            <div className={"mt-7"}>
-              <ul className={"grid gap-4"}>
-                {navbarList.map((item, i) => (
-                  <li key={i}>
-                    <Link
-                      className={`flex items-center w-full  hover:bg-slate-600/10 px-5 rounded-md text-xl font-semibold py-2 ${
-                        item.path.split("/")[1] === currentPath
-                          ? "border border-primary-main/20"
-                          : ""
-                      }`}
-                      to={item.path}
-                    >
-                      <div
-                        className={`flex items-center gap-4 ${
-                          item.path.split("/")[1] === currentPath
-                            ? "active_sidebar_link"
-                            : ""
-                        }`}
-                      >
-                        <div>
-                          <ReactSVG
-                            src={
-                              item.path.split("/")[1] === currentPath
-                                ? item.iconActive
-                                : item.iconDefault
-                            }
-                          />
-                        </div>
-                        {item.title}
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className={"text-slate-500 text-sm text-center"}>
-            © {new Date().getFullYear() + " - My Worship"}
-          </div>
+      <div className={"w-[360px]"}></div>
+      <div
+        className={
+          "w-[360px]  bg-white z-[10] fixed  border h-full sidebar-layout px-3"
+        }
+      >
+        <div className={"py-8 px-6"}>
+          <BrandLogo />
         </div>
+        {navbarList.map((item: ISidebarMenu, key: any) => (
+          <MenuItem key={key} item={item} />
+        ))}
       </div>
     </div>
   );
+};
+
+interface IMenuItem {
+  item: ISidebarMenu;
 }
+
+const MenuItem = ({ item }: IMenuItem) => {
+  const Component = hasChildren(item) ? MultiLevel : SingleLevel;
+  return <Component item={item} />;
+};
+
+const SingleLevel = ({ item }: IMenuItem) => {
+  const navigate = useNavigate();
+  const handleClick = (link?: string) => {
+    if (link) {
+      navigate(link);
+    }
+  };
+  const uri = location.pathname;
+
+  return (
+    <ListItem
+      button
+      classes={{
+        button: `${
+          checkActiveSidebar(uri) === checkActiveSidebar(item.path) &&
+          "active-link"
+        }  list_item_sidebar`,
+      }}
+      onClick={() => handleClick(item.path)}
+    >
+      <ListItemIcon>
+        <ReactSVG
+          src={
+            checkActiveSidebar(uri) === checkActiveSidebar(item.path)
+              ? item.activeIcon
+              : item.icon ?? ""
+          }
+        />
+      </ListItemIcon>
+      <ListItemText primary={item.title} />
+    </ListItem>
+  );
+};
+
+const MultiLevel = ({ item }: IMenuItem) => {
+  const { items: children } = item;
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const uri = location.pathname;
+  const handleClick = (link?: string) => {
+    setOpen((prev) => !prev);
+    if (link) {
+      navigate(link);
+    }
+  };
+
+  useEffect(() => {
+    if (item.path !== uri) {
+      setOpen(false);
+    }
+  }, [uri]);
+
+  return (
+    <div
+      className={`${
+        checkActiveSidebar(uri) === checkActiveSidebar(item.path) &&
+        "active-link"
+      }`}
+    >
+      <ListItem
+        button
+        onClick={() => handleClick(item.path)}
+        className={` list_item_sidebar`}
+      >
+        <ListItemIcon>
+          <ReactSVG
+            src={
+              checkActiveSidebarChild(uri) ===
+              checkActiveSidebarChild(item.path)
+                ? item.activeIcon
+                : item.icon
+            }
+          />
+        </ListItemIcon>
+        <ListItemText primary={item.title} />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {children?.length &&
+            children.map((child?: any, key?: any) => (
+              <div key={key}>{child.title} 123</div>
+            ))}
+        </List>
+      </Collapse>
+    </div>
+  );
+};

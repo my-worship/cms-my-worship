@@ -1,7 +1,7 @@
 import { AnyAction, applyMiddleware, compose, createStore } from "redux";
 import thunk, { ThunkDispatch } from "redux-thunk";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import rootReducers from "./root.reducerts";
+import rootReducers from "./RootReducers";
 
 const storeRedux = createStore(rootReducers, compose(applyMiddleware(thunk)));
 export type RootState = ReturnType<typeof storeRedux.getState>;

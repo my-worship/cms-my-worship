@@ -9,8 +9,8 @@ import {
 import React from "react";
 import { ArrowDropDown, Logout } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
-import { fakeImage } from "../../helper/fake-data-helper";
 import AuthServices from "../../services/AuthService";
+import { useAppSelector } from "../../redux/store";
 
 interface IProfileMenu {
   textDark?: boolean;
@@ -20,6 +20,8 @@ export const ProfileMenu = (props: IProfileMenu) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const authService = new AuthServices();
   const open = Boolean(anchorEl);
+
+  const { User } = useAppSelector((state) => state);
 
   function onLogout() {
     authService.Logout().then();
@@ -70,7 +72,7 @@ export const ProfileMenu = (props: IProfileMenu) => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem>
-          <Avatar src={fakeImage()} /> Profile
+          <Avatar src={User.getMeData?.data?.image} /> Profile
         </MenuItem>
         <Divider />
 
@@ -106,11 +108,11 @@ export const ProfileMenu = (props: IProfileMenu) => {
             <div className={"w-fit h-fit bg-white rounded-full p-1 border"}>
               <Avatar
                 sx={{ width: 30, height: 30 }}
-                src={fakeImage(300, 300)}
+                src={User.getMeData?.data?.image}
               />
             </div>
             <div className={`text-xs ${props.textDark && "text-white"}`}>
-              {"RIVO PELU"}
+              {User.getMeData?.data?.name}
             </div>
             <ArrowDropDown
               className={`text-xs ${props.textDark && "text-white"}`}

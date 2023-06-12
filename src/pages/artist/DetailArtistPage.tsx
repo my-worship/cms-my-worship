@@ -21,6 +21,7 @@ import { PopupModal } from "../../components/atoms/PopupModal";
 import { assets } from "../../constants/assets";
 import { PopupContent } from "../../components/atoms/PopupContent";
 import { UiServices } from "../../services/UiServices";
+import { UserRoleEnum } from "../../enums/UserRoleEnums";
 
 export function DetailArtistPage() {
   const [dataDetail, setDataDetail] = useState<IResDetailArtist | undefined>(
@@ -34,7 +35,7 @@ export function DetailArtistPage() {
   const dateHelper = new DateHelper();
   const uiService = new UiServices();
   const dispatch = useAppDispatch();
-  const { Artist } = useAppSelector((state) => state);
+  const { Artist, User } = useAppSelector((state) => state);
   const params = useParams();
   const slug = params?.slug;
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ export function DetailArtistPage() {
     }
     if (Artist?.approveArtist?.data) {
       dispatch(artistActions.resetArtistReducers()).then(() => {
-        navigate(stringRoutes.artist());
+        navigate(stringRoutes.artist("publish"));
         uiService.handleSnackbarSuccess("Artist Success Approved");
       });
     }
@@ -67,7 +68,7 @@ export function DetailArtistPage() {
 
   const breadCrumbData: IBreadCrumbList[] = [
     { path: stringRoutes.root(), label: "Home" },
-    { path: stringRoutes.artist(), label: "Artist" },
+    { path: stringRoutes.artist("all"), label: "Artist" },
     { label: "Artist Name" },
   ];
 
@@ -130,7 +131,12 @@ export function DetailArtistPage() {
         onSubmit={onApproveArtist}
       />
       <HeaderLayouts
-        rightContent={rightContentHeader()}
+        rightContent={
+          dataDetail?.status === "PENDING" &&
+          User?.getMeData?.data?.role &&
+          User?.getMeData?.data?.role === UserRoleEnum.SUPER_ADMIN &&
+          rightContentHeader()
+        }
         breadcrumbData={breadCrumbData}
         title={"Artist Detail"}
       />

@@ -4,6 +4,7 @@ import { FilterList } from "@mui/icons-material";
 import { MainCard } from "../atoms/MainCard";
 import { Col } from "../atoms/Col";
 import { LoadingSpinner } from "../atoms/LoadingSpiner";
+import { EmptyState } from "../atoms/EmptyState";
 
 const Body = ({ data, col, onClick, disableOnClickIndex }: IPropsBody) => {
   return (
@@ -104,72 +105,78 @@ export const MainTable = (props: ITableProps) => {
     );
   } else {
     return (
-      <div className={"overflow-x-auto"}>
-        <table
-          className={` text-sm text-left text-gray-500 table-auto w-full  ${props?.className}`}
-        >
-          {!props.hideHeader && (
-            <thead className="text-xs text-gray-700 uppercase  border-b">
-              <tr>
-                {props.count && (
-                  <th
-                    scope="col"
-                    className="py-3 px-6 bg-white  border-transparent"
-                  >
-                    No
-                  </th>
-                )}
-                {props.column.map((item: any) => (
-                  <th
-                    key={item.headerTitle}
-                    scope="col"
-                    className={`py-3 px-6 bg-white w-fit  border ${item.headerClassName}`}
-                  >
-                    <div className={"flex items-center justify-between"}>
-                      {props.isLoading ? (
-                        <div className={"w-full"}>
-                          <Skeleton
-                            height={24}
-                            width={"90%"}
-                            variant={"text"}
-                          />
-                        </div>
-                      ) : (
-                        item.headerTitle ?? ""
-                      )}
-                      {item?.sort && (
-                        <>
+      <>
+        {props.data?.length === 0 ? (
+          <EmptyState />
+        ) : (
+          <div className={"overflow-x-auto"}>
+            <table
+              className={` text-sm text-left text-gray-500 table-auto w-full  ${props?.className}`}
+            >
+              {!props.hideHeader && (
+                <thead className="text-xs text-gray-700 uppercase  border-b">
+                  <tr>
+                    {props.count && (
+                      <th
+                        scope="col"
+                        className="py-3 px-6 bg-white  border-transparent"
+                      >
+                        No
+                      </th>
+                    )}
+                    {props.column.map((item: any) => (
+                      <th
+                        key={item.headerTitle}
+                        scope="col"
+                        className={`py-3 px-6 bg-white w-fit  border ${item.headerClassName}`}
+                      >
+                        <div className={"flex items-center justify-between"}>
                           {props.isLoading ? (
-                            <Skeleton height={16} width={16} />
-                          ) : (
-                            <div
-                              onClick={() =>
-                                item.onSort(handleCekSort(item.key))
-                              }
-                            >
-                              <IconButton>
-                                <FilterList />
-                              </IconButton>
+                            <div className={"w-full"}>
+                              <Skeleton
+                                height={24}
+                                width={"90%"}
+                                variant={"text"}
+                              />
                             </div>
+                          ) : (
+                            item.headerTitle ?? ""
                           )}
-                        </>
-                      )}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-          )}
+                          {item?.sort && (
+                            <>
+                              {props.isLoading ? (
+                                <Skeleton height={16} width={16} />
+                              ) : (
+                                <div
+                                  onClick={() =>
+                                    item.onSort(handleCekSort(item.key))
+                                  }
+                                >
+                                  <IconButton>
+                                    <FilterList />
+                                  </IconButton>
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+              )}
 
-          <Body
-            disableOnClickIndex={props.disableOnClickIndex}
-            onClick={props.onClick}
-            isLoading={props?.isLoading}
-            data={props?.data}
-            col={props.column}
-          />
-        </table>
-      </div>
+              <Body
+                disableOnClickIndex={props.disableOnClickIndex}
+                onClick={props.onClick}
+                isLoading={props?.isLoading}
+                data={props?.data}
+                col={props.column}
+              />
+            </table>
+          </div>
+        )}
+      </>
     );
   }
 };

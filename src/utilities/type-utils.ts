@@ -132,4 +132,22 @@ export interface IPayloadSuccess {
   loading?: boolean;
 }
 
-export type TypeArtistStatus = "all" | "pending" | "need-revision" | "draf";
+export type TypeArtistStatus =
+  | "all"
+  | "pending"
+  | "need-revision"
+  | "draf"
+  | "publish";
+
+export interface ISidebarMenu {
+  icon: any;
+  activeIcon: string;
+  title: string;
+  items?: ItemsSidebarMenu[];
+  path: string;
+}
+
+interface ItemsSidebarMenu {
+  title: string;
+  path: string;
+}
