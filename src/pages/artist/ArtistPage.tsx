@@ -18,10 +18,12 @@ import { Paginated } from "../../components/atoms/Paginated";
 import {
   defaultPaginatedData,
   IPaginatedParams,
+  TypeArtistStatus,
 } from "../../utilities/type-utils";
 import { IResultPaginatedData } from "../../utilities/base-response";
 import { DateHelper } from "../../helper/date-helper";
 import QueryParamsHelper from "../../helper/query-params-helper";
+import { dataListStatus } from "../../constants/StatusListConstants";
 
 export function ArtistPage() {
   const [paginatedData, setPaginatedData] =
@@ -37,13 +39,14 @@ export function ArtistPage() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { Artist } = useAppSelector((state) => state);
+  const [statusFilter, setStatusFilter] = useState<TypeArtistStatus>("all");
 
   useEffect(() => {
-    fetchDataList();
+    fetchDataList("all");
   }, []);
 
-  function fetchDataList(param?: string) {
-    dispatch(artistActions.getListArtist("all", param)).then();
+  function fetchDataList(status: TypeArtistStatus, param?: string) {
+    dispatch(artistActions.getListArtist(status, param)).then();
   }
 
   function onSearchFunction(e: string) {
@@ -53,7 +56,7 @@ export function ArtistPage() {
       search: e,
       ...paginatedData,
     });
-    fetchDataList(param);
+    fetchDataList(statusFilter);
     navigate({ search: param });
   }
 
@@ -68,9 +71,14 @@ export function ArtistPage() {
     }
   }, [Artist.listArtist]);
 
+  function onClickChipsStatus(e: TypeArtistStatus) {
+    setStatusFilter(e);
+    fetchDataList(e);
+  }
+
   function onChangePagination(e: IPaginatedParams) {
     const param = queryParamsHelper.getUrlParsingValue(e);
-    fetchDataList(param);
+    fetchDataList(statusFilter);
     navigate({ search: param });
   }
 
@@ -140,6 +148,12 @@ export function ArtistPage() {
             label={e.status_string.toUpperCase() ?? "-"}
           />
         )}
+        {e.status_enum === "DRAFT" && (
+          <Chip
+            color={"default"}
+            label={e.status_string.toUpperCase() ?? "-"}
+          />
+        )}
       </div>
     );
   }
@@ -160,6 +174,23 @@ export function ArtistPage() {
     );
   }
 
+  function chipsListStatus() {
+    return (
+      <div className={"flex items-center gap-3"}>
+        {dataListStatus.map((item, i) => (
+          <div key={i}>
+            <Chip
+              color={item.value === statusFilter ? "primary" : undefined}
+              variant={item.value === statusFilter ? "outlined" : "filled"}
+              label={item.label}
+              onClick={() => onClickChipsStatus(item.value)}
+            />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className={"w-full grid gap-5"}>
       <HeaderLayouts title={"Artist"} />
@@ -176,6 +207,7 @@ export function ArtistPage() {
         </Btn>
       </div>
 
+      {chipsListStatus()}
       <div>
         <MainTable
           isLoading={Artist?.listArtist?.loading}

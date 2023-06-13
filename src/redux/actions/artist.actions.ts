@@ -16,6 +16,23 @@ export class ArtistActions extends BaseActions {
   private url = endpoint.artist;
   private artist = ArtistSlice.actions;
 
+  public saveDraftArtist(data: IRequestNewArtist) {
+    return async (dispatch: Dispatch) => {
+      dispatch(this.artist.saveDraftArtist({ loading: true }));
+      await this.httpService
+        .POST<IRequestNewArtist>(this.url.saveDraftArtist(), data)
+        .then(() => {
+          dispatch(this.artist.saveDraftArtist({ loading: false, data: true }));
+        })
+        .catch((e) => {
+          this.errorService.fetchApiError(e);
+          dispatch(
+            this.artist.saveDraftArtist({ loading: false, data: undefined })
+          );
+        });
+    };
+  }
+
   public approveArtist(slug: string) {
     return async (dispatch: Dispatch) => {
       dispatch(this.artist.approveArtist({ loading: true }));
@@ -57,7 +74,7 @@ export class ArtistActions extends BaseActions {
     return async (dispatch: Dispatch) => {
       dispatch(this.artist.listArtist({ loading: true, data: undefined }));
       await this.httpService
-        .GET(this.url.getListArtist(status, param))
+        .GET(this.url.getListArtist(status, param ?? ""))
         .then((res: BaseResponsePaginated<IResListArtist[]>) => {
           dispatch(
             this.artist.listArtist({

@@ -15,10 +15,16 @@ export const ArtistSlice = createSlice({
   initialState: initState,
   reducers: {
     createArtist: (state: IArtistReducers, action: BasePayload<boolean>) => {
-      state.createArtist = action.payload.data;
+      state.createArtist = {
+        loading: action.payload.loading,
+        data: action.payload.data,
+      };
     },
     saveDraftArtist: (state: IArtistReducers, action: BasePayload<boolean>) => {
-      state.createArtist = action.payload.data;
+      state.createArtist = {
+        data: action.payload.data,
+        loading: action.payload.loading,
+      };
     },
     listArtist: (
       state: IArtistReducers,
@@ -49,7 +55,7 @@ export const ArtistSlice = createSlice({
 });
 
 export interface IArtistReducers {
-  createArtist?: boolean;
+  createArtist?: IPayloadData<boolean>;
   listArtist?: IPayloadDataPaginated<IResListArtist[]>;
   detailArtist?: IPayloadData<IResDetailArtist>;
   approveArtist?: IPayloadData<boolean>;

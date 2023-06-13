@@ -22,19 +22,5 @@ export const navbarList: ISidebarMenu[] = [
     path: stringRoutes.artist("all"),
     icon: assets.sidebar_icon.artist.default,
     activeIcon: assets.sidebar_icon.artist.active,
-    items: [
-      {
-        title: "All",
-        path: stringRoutes.artist("all"),
-      },
-      {
-        title: "Publish",
-        path: stringRoutes.artist("publish"),
-      },
-      {
-        title: "Pending",
-        path: stringRoutes.artist("pending"),
-      },
-    ],
   },
 ];

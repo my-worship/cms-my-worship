@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { ReactSVG } from "react-svg";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { navbarList } from "../../constants/SidebarMenu";
 import { BrandLogo } from "../atoms/BrandLogo";
 import { ISidebarMenu } from "../../utilities/type-utils";
@@ -103,7 +103,12 @@ const MultiLevel = ({ item }: IMenuItem) => {
   const location = useLocation();
   const uri = location.pathname;
   const handleClick = (link?: string) => {
-    setOpen((prev) => !prev);
+    console.log(checkActiveSidebar(link ?? ""));
+    if (checkActiveSidebar(link ?? "") === checkActiveSidebar(uri)) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
     if (link) {
       navigate(link);
     }
@@ -130,8 +135,7 @@ const MultiLevel = ({ item }: IMenuItem) => {
         <ListItemIcon>
           <ReactSVG
             src={
-              checkActiveSidebarChild(uri) ===
-              checkActiveSidebarChild(item.path)
+              checkActiveSidebar(uri) === checkActiveSidebar(item.path)
                 ? item.activeIcon
                 : item.icon
             }
@@ -144,7 +148,11 @@ const MultiLevel = ({ item }: IMenuItem) => {
         <List component="div" disablePadding>
           {children?.length &&
             children.map((child?: any, key?: any) => (
-              <div key={key}>{child.title} 123</div>
+              <Link key={key} to={child.path}>
+                <div className={"py-3"} key={key}>
+                  {child.title} 123
+                </div>
+              </Link>
             ))}
         </List>
       </Collapse>

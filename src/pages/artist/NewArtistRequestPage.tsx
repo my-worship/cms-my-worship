@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { HeaderLayouts } from "../../components/atoms/HeaderLayouts";
 import { IBreadCrumbList } from "../../utilities/type-utils";
 import { StringRoutes } from "../../routes/string-routes";
@@ -23,14 +23,18 @@ export function NewArtistRequestPage() {
   const uiService = new UiServices();
   const navigate = useNavigate();
   const stringRoutes = new StringRoutes();
-
+  const [saveDraft, setSaveDraf] = useState<boolean>(false);
   useEffect(() => {
-    if (Artist.createArtist) {
+    if (Artist.createArtist?.data) {
       uiService.handleSnackbarSuccess("Artist Success Requested");
       navigate(stringRoutes.artist("pending"));
       dispatch(artistActions.resetArtistReducers()).then();
+    } else if (Artist.approveArtist?.data) {
+      uiService.handleSnackbarSuccess("Save Artist Draft Success");
+      navigate(stringRoutes.artist("draft"));
+      dispatch(artistActions.resetArtistReducers()).then();
     }
-  }, [Artist.createArtist]);
+  }, [Artist.createArtist, Artist.approveArtist]);
 
   const initValueCreate: IRequestNewArtist = {
     name: "",
@@ -51,7 +55,13 @@ export function NewArtistRequestPage() {
         description: value.description,
         image: value?.image ? value?.image : undefined,
       };
-      dispatch(artistActions.createArtist(data)).then();
+      setTimeout(() => {
+        if (saveDraft) {
+          dispatch(artistActions.saveDraftArtist(data)).then();
+        } else {
+          dispatch(artistActions.createArtist(data)).then();
+        }
+      }, 200);
     },
   });
   const breadcrumb: IBreadCrumbList[] = [
@@ -59,9 +69,29 @@ export function NewArtistRequestPage() {
     { path: stringRoutes.artist("all"), label: "All" },
     { label: "New" },
   ];
+
+  function rightContent() {
+    return (
+      <Btn
+        variant={"outlined"}
+        color={"info"}
+        onClick={() => {
+          setSaveDraf(true);
+          formik.handleSubmit();
+        }}
+      >
+        Save Draft
+      </Btn>
+    );
+  }
+
   return (
     <div className={"grid gap-6"}>
-      <HeaderLayouts title={"Request New Artist"} breadcrumbData={breadcrumb} />
+      <HeaderLayouts
+        rightContent={rightContent()}
+        title={"Request New Artist"}
+        breadcrumbData={breadcrumb}
+      />
       <MainCard>
         <div className={"max-w-3xl mx-auto grid gap-10 text-center"}>
           <div>
