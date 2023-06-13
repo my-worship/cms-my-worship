@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { IResListArtist } from "../../model/response/IResListArtist";
 import { Avatar, Chip } from "@mui/material";
 import { IconBtnWithTooltip } from "../../components/atoms/IconBtnWithTooltip";
-import { Info } from "@mui/icons-material";
+import { Edit, Info } from "@mui/icons-material";
 import { Paginated } from "../../components/atoms/Paginated";
 import {
   defaultPaginatedData,
@@ -23,7 +23,12 @@ import {
 import { IResultPaginatedData } from "../../utilities/base-response";
 import { DateHelper } from "../../helper/date-helper";
 import QueryParamsHelper from "../../helper/query-params-helper";
-import { dataListStatus } from "../../constants/StatusListConstants";
+import {
+  dataListStatus,
+  dataListStatusSuperAdmin,
+} from "../../constants/StatusListConstants";
+import { StatusEnum } from "../../enums/statusEnum";
+import { UserRoleEnum } from "../../enums/UserRoleEnums";
 
 export function ArtistPage() {
   const [paginatedData, setPaginatedData] =
@@ -38,8 +43,13 @@ export function ArtistPage() {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { Artist } = useAppSelector((state) => state);
+  const { Artist, User } = useAppSelector((state) => state);
   const [statusFilter, setStatusFilter] = useState<TypeArtistStatus>("all");
+
+  const statusData =
+    User.getMeData?.data?.role !== UserRoleEnum.SUPER_ADMIN
+      ? dataListStatus
+      : dataListStatusSuperAdmin;
 
   useEffect(() => {
     fetchDataList("all");
@@ -111,7 +121,7 @@ export function ArtistPage() {
         <IconBtnWithTooltip
           onClick={() => navigate(stringRoutes.detailArtist(e.slug))}
           label={"Details"}
-          icon={<Info />}
+          icon={e.status_enum === StatusEnum.DRAFT ? <Edit /> : <Info />}
         />
       </div>
     );
@@ -177,7 +187,7 @@ export function ArtistPage() {
   function chipsListStatus() {
     return (
       <div className={"flex items-center gap-3"}>
-        {dataListStatus.map((item, i) => (
+        {statusData.map((item, i) => (
           <div key={i}>
             <Chip
               color={item.value === statusFilter ? "primary" : undefined}
