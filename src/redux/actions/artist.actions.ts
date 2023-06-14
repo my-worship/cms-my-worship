@@ -11,6 +11,7 @@ import {
 } from "../../utilities/base-response";
 import { IResListArtist } from "../../model/response/IResListArtist";
 import { IResDetailArtist } from "../../model/response/IResDetailArtist";
+import { IReqRejectReviseArtist } from "../../model/request/IReqRejectReviseArtist";
 
 export class ArtistActions extends BaseActions {
   private url = endpoint.artist;
@@ -91,6 +92,21 @@ export class ArtistActions extends BaseActions {
     };
   }
 
+  public rejectArtist(slug: string, data: IReqRejectReviseArtist) {
+    return async (dispatch: Dispatch) => {
+      dispatch(this.artist.rejectArtist({ loading: true, data: undefined }));
+      await this.httpService
+        .PUT<IReqRejectReviseArtist>(this.url.rejectArtist(slug), data)
+        .then(() => {
+          dispatch(this.artist.rejectArtist({ loading: false, data: true }));
+        })
+        .catch((e) => {
+          this.errorService.fetchApiError(e);
+          dispatch(this.artist.rejectArtist({ loading: false }));
+        });
+    };
+  }
+
   public createArtist(data: IRequestNewArtist) {
     return async (dispatch: Dispatch) => {
       dispatch(
@@ -128,6 +144,7 @@ export class ArtistActions extends BaseActions {
       dispatch(this.artist.detailArtist({ data: undefined }));
       dispatch(this.artist.approveArtist({ data: undefined }));
       dispatch(this.artist.listArtist({ data: undefined }));
+      dispatch(this.artist.rejectArtist({ data: undefined }));
     };
   }
 }

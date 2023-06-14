@@ -51,6 +51,12 @@ export const ArtistSlice = createSlice({
         loading: action.payload.loading,
       };
     },
+    rejectArtist: (state: IArtistReducers, action: BasePayload<boolean>) => {
+      state.rejectArtist = {
+        data: action.payload.data,
+        loading: action.payload.loading,
+      };
+    },
   },
 });
 
@@ -60,4 +66,5 @@ export interface IArtistReducers {
   detailArtist?: IPayloadData<IResDetailArtist>;
   approveArtist?: IPayloadData<boolean>;
   saveDraftArtist?: IPayloadData<boolean>;
+  rejectArtist?: IPayloadData<boolean>;
 }

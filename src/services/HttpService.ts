@@ -20,6 +20,10 @@ export class HttpService {
     return axios.post(this.baseEndpoint + URL, data, this.HeaderSetting());
   }
 
+  public PUT<T>(URL: string, data: T) {
+    return axios.put(this.baseEndpoint + URL, data, this.HeaderSetting());
+  }
+
   public PATCH(URL: string) {
     return axios.patch(
       this.baseEndpoint + URL,

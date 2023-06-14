@@ -27,11 +27,11 @@ export function NewArtistRequestPage() {
   useEffect(() => {
     if (Artist.createArtist?.data) {
       uiService.handleSnackbarSuccess("Artist Success Requested");
-      navigate(stringRoutes.artist("pending"));
+      navigate(stringRoutes.artist());
       dispatch(artistActions.resetArtistReducers()).then();
     } else if (Artist.approveArtist?.data) {
       uiService.handleSnackbarSuccess("Save Artist Draft Success");
-      navigate(stringRoutes.artist("draft"));
+      navigate(stringRoutes.artist());
       dispatch(artistActions.resetArtistReducers()).then();
     }
   }, [Artist.createArtist, Artist.approveArtist]);
@@ -65,8 +65,7 @@ export function NewArtistRequestPage() {
     },
   });
   const breadcrumb: IBreadCrumbList[] = [
-    { path: stringRoutes.artist("all"), label: "Artist" },
-    { path: stringRoutes.artist("all"), label: "All" },
+    { path: stringRoutes.artist(), label: "Artist" },
     { label: "New" },
   ];
 

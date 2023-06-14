@@ -146,6 +146,9 @@ export function ArtistPage() {
             label={e.status_string.toUpperCase() ?? "-"}
           />
         )}
+        {e.status_enum === "REJECT" && (
+          <Chip color={"error"} label={e.status_string.toUpperCase() ?? "-"} />
+        )}
         {e.status_enum === "NEED_REVISION" && (
           <Chip
             color={"secondary"}

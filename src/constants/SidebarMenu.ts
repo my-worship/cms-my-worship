@@ -19,7 +19,7 @@ export const navbarList: ISidebarMenu[] = [
   },
   {
     title: "Artist",
-    path: stringRoutes.artist("all"),
+    path: stringRoutes.artist(),
     icon: assets.sidebar_icon.artist.default,
     activeIcon: assets.sidebar_icon.artist.active,
   },

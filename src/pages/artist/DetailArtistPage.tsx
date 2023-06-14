@@ -1,6 +1,6 @@
 import { HeaderLayouts } from "../../components/atoms/HeaderLayouts";
 import React, { useEffect, useState } from "react";
-import { IBreadCrumbList } from "../../utilities/type-utils";
+import { IBreadCrumbList, TypeArtistStatus } from "../../utilities/type-utils";
 import { StringRoutes } from "../../routes/string-routes";
 import { Check, Close, Edit } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
@@ -22,6 +22,10 @@ import { assets } from "../../constants/assets";
 import { PopupContent } from "../../components/atoms/PopupContent";
 import { UiServices } from "../../services/UiServices";
 import { UserRoleEnum } from "../../enums/UserRoleEnums";
+import { InputTextarea } from "../../components/atoms/InputTextArea";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { IReqRejectReviseArtist } from "../../model/request/IReqRejectReviseArtist";
 
 export function DetailArtistPage() {
   const [dataDetail, setDataDetail] = useState<IResDetailArtist | undefined>(
@@ -29,7 +33,7 @@ export function DetailArtistPage() {
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isOpenModalApprove, setIsOpenModalApprove] = useState<boolean>(false);
-
+  const [isOpenModalReject, setIsOpenModalReject] = useState<boolean>(false);
   const stringRoutes = new StringRoutes();
   const artistActions = new ArtistActions();
   const dateHelper = new DateHelper();
@@ -40,6 +44,23 @@ export function DetailArtistPage() {
   const slug = params?.slug;
   const navigate = useNavigate();
 
+  const formikReason = useFormik({
+    initialValues: {
+      reason: "",
+    },
+    validationSchema: yup.object({
+      reason: yup.string().required(),
+    }),
+    onSubmit: (values) => {
+      const data: IReqRejectReviseArtist = {
+        reason: values.reason,
+      };
+      if (slug) {
+        dispatch(artistActions.rejectArtist(slug, data)).then();
+      }
+    },
+  });
+
   useEffect(() => {
     if (slug) {
       dispatch(artistActions.getDetailArtistBySlug(slug)).then();
@@ -47,7 +68,7 @@ export function DetailArtistPage() {
   }, [slug]);
 
   useEffect(() => {
-    if (Artist?.detailArtist?.loading && !dataDetail) {
+    if (Artist?.detailArtist?.loading) {
       setIsLoading(true);
     } else {
       setIsLoading(false);
@@ -60,7 +81,12 @@ export function DetailArtistPage() {
     }
     if (Artist?.approveArtist?.data) {
       dispatch(artistActions.resetArtistReducers()).then(() => {
-        navigate(stringRoutes.artist("publish"));
+        navigate(stringRoutes.artist());
+        uiService.handleSnackbarSuccess("Artist Success Approved");
+      });
+    } else if (Artist?.rejectArtist?.data) {
+      dispatch(artistActions.resetArtistReducers()).then(() => {
+        navigate(stringRoutes.artist());
         uiService.handleSnackbarSuccess("Artist Success Approved");
       });
     }
@@ -68,25 +94,34 @@ export function DetailArtistPage() {
 
   const breadCrumbData: IBreadCrumbList[] = [
     { path: stringRoutes.root(), label: "Home" },
-    { path: stringRoutes.artist("all"), label: "Artist" },
+    { path: stringRoutes.artist(), label: "Artist" },
     { label: "Artist Name" },
   ];
 
-  function onApproveArtist() {
+  function onClickActionsArtist(type: TypeArtistStatus) {
     if (slug) {
-      dispatch(artistActions.approveArtist(slug)).then();
+      if (type === "publish") {
+        dispatch(artistActions.approveArtist(slug)).then();
+      } else if (type === "reject") {
+        formikReason.handleSubmit();
+      }
     }
   }
 
-  function onCloseModalApproveFunction() {
+  function onCloseModal() {
     setIsOpenModalApprove(false);
+    setIsOpenModalReject(false);
   }
 
   function rightContentHeader() {
     return (
       <Row itemsAlign={"center"} gap={"sm"}>
         <Tooltip arrow={true} title={"Reject"}>
-          <Button color={"error"} variant={"outlined"}>
+          <Button
+            onClick={() => setIsOpenModalReject(true)}
+            color={"error"}
+            variant={"outlined"}
+          >
             <Close />
           </Button>
         </Tooltip>
@@ -121,14 +156,42 @@ export function DetailArtistPage() {
     );
   }
 
+  function componentModalReject() {
+    return (
+      <div className={"grid gap-2"}>
+        <h3 className={"text-gray-600"}>Reject Artist</h3>
+        <InputTextarea
+          label={"Reject Reason"}
+          required={true}
+          name={"reason"}
+          placeholder={"Enter your reasons for rejecting this artist data"}
+          onChange={formikReason.handleChange}
+          onBlur={formikReason.handleBlur}
+          id={"reject_reason"}
+          value={formikReason.values.reason}
+          errorMessage={
+            formikReason.touched.reason && formikReason.errors.reason
+          }
+        />
+      </div>
+    );
+  }
+
   return (
     <Col gap={"lg"}>
       <PopupModal
         isOpen={isOpenModalApprove}
-        onClose={onCloseModalApproveFunction}
-        onCancel={onCloseModalApproveFunction}
+        onClose={onCloseModal}
+        onCancel={onCloseModal}
         components={componentModalApprove()}
-        onSubmit={onApproveArtist}
+        onSubmit={() => onClickActionsArtist("publish")}
+      />
+      <PopupModal
+        isOpen={isOpenModalReject}
+        onClose={onCloseModal}
+        onCancel={onCloseModal}
+        components={componentModalReject()}
+        onSubmit={() => onClickActionsArtist("reject")}
       />
       <HeaderLayouts
         rightContent={
@@ -153,7 +216,14 @@ export function DetailArtistPage() {
                 </Alert>
               </div>
             )}
-
+            {dataDetail?.status === "REJECT" && (
+              <div className={"mb-3"}>
+                <Alert severity="error">
+                  <div className={"font-semibold"}>Rejected</div>
+                  <p>{checkMappingData(dataDetail?.reject_reason)}</p>
+                </Alert>
+              </div>
+            )}
             <h1>{checkMappingData(dataDetail?.name)}</h1>
             <div className={"content_html mt-3"}>
               <div
