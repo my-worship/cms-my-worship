@@ -142,30 +142,38 @@ export function ArtistPage() {
 
   function uiStatus(e: IResListArtist) {
     return (
-      <div>
+      <div className={"w-full flex items-center"}>
         {e.status_enum === "PENDING" && (
           <Chip
+            className={"w-full"}
             color={"warning"}
             label={e.status_string.toUpperCase() ?? "-"}
           />
         )}
         {e.status_enum === "REJECT" && (
-          <Chip color={"error"} label={e.status_string.toUpperCase() ?? "-"} />
+          <Chip
+            className={"w-full"}
+            color={"error"}
+            label={e.status_string.toUpperCase() ?? "-"}
+          />
         )}
         {e.status_enum === "NEED_REVISION" && (
           <Chip
+            className={"w-full"}
             color={"secondary"}
             label={e.status_string.toUpperCase() ?? "-"}
           />
         )}
         {e.status_enum === "PUBLISH" && (
           <Chip
+            className={"w-full"}
             color={"success"}
             label={e.status_string.toUpperCase() ?? "-"}
           />
         )}
         {e.status_enum === "DRAFT" && (
           <Chip
+            className={"w-full"}
             color={"default"}
             label={e.status_string.toUpperCase() ?? "-"}
           />
