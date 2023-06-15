@@ -45,13 +45,6 @@ export const Paginated = (props: IProps) => {
 
   function handlePageClick(e: any) {
     setPage(e.selected);
-    if (props.onChange) {
-      props.onChange({
-        page: e.selected,
-        size: size,
-        total_data: resultValue.total_data,
-      });
-    }
   }
 
   useEffect(() => {
@@ -63,10 +56,8 @@ export const Paginated = (props: IProps) => {
   }, [page, size]);
 
   useEffect(() => {
-    if (resultValue.total_data !== 0) {
-      if (props.onChange) {
-        props.onChange(resultValue);
-      }
+    if (props.onChange) {
+      props.onChange(resultValue);
     }
   }, [resultValue]);
 
@@ -104,9 +95,10 @@ export const Paginated = (props: IProps) => {
               label="Age"
               onChange={handleChange}
             >
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-              <MenuItem value={6}>6</MenuItem>
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
             </Select>
           </FormControl>
         </div>

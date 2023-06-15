@@ -2,7 +2,7 @@ import { HeaderLayouts } from "../../components/atoms/HeaderLayouts";
 import React, { useEffect, useState } from "react";
 import { IBreadCrumbList, TypeArtistStatus } from "../../utilities/type-utils";
 import { StringRoutes } from "../../routes/string-routes";
-import { Check, Close, Edit } from "@mui/icons-material";
+import { Check, Close, Edit, QuestionMark } from "@mui/icons-material";
 import Tooltip from "@mui/material/Tooltip";
 import { Alert, Button } from "@mui/material";
 import { Row } from "../../components/atoms/Row";
@@ -26,6 +26,7 @@ import { InputTextarea } from "../../components/atoms/InputTextArea";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { IReqRejectReviseArtist } from "../../model/request/IReqRejectReviseArtist";
+import { Btn } from "../../components/atoms/Btn";
 
 export function DetailArtistPage() {
   const [dataDetail, setDataDetail] = useState<IResDetailArtist | undefined>(
@@ -36,6 +37,7 @@ export function DetailArtistPage() {
   const [isOpenModalReject, setIsOpenModalReject] = useState<boolean>(false);
   const [isOpenModalRevision, setIsOpenModalRevision] =
     useState<boolean>(false);
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
   const stringRoutes = new StringRoutes();
   const artistActions = new ArtistActions();
   const dateHelper = new DateHelper();
@@ -58,7 +60,6 @@ export function DetailArtistPage() {
         reason: values.reason,
       };
       if (slug) {
-        console.log(isOpenModalRevision);
         if (isOpenModalReject) {
           dispatch(artistActions.rejectArtist(slug, data)).then();
         } else if (isOpenModalRevision) {
@@ -101,6 +102,11 @@ export function DetailArtistPage() {
         navigate(stringRoutes.artist());
         uiService.handleSnackbarSuccess("Artist Send Ned Revision Success");
       });
+    } else if (Artist?.deleteArtist?.data) {
+      dispatch(artistActions.resetArtistReducers()).then(() => {
+        navigate(stringRoutes.artist());
+        uiService.handleSnackbarSuccess("Artist delete Success");
+      });
     }
   }, [Artist]);
 
@@ -110,7 +116,7 @@ export function DetailArtistPage() {
     { label: "Artist Name" },
   ];
 
-  function onClickActionsArtist(type: TypeArtistStatus) {
+  function onClickActionsArtist(type: TypeArtistStatus | "delete") {
     if (slug) {
       if (type === "publish") {
         dispatch(artistActions.approveArtist(slug)).then();
@@ -118,6 +124,8 @@ export function DetailArtistPage() {
         formikReason.handleSubmit();
       } else if (type === "need-revision") {
         formikReason.handleSubmit();
+      } else if (type === "delete") {
+        dispatch(artistActions.deleteArtist(slug)).then();
       }
     }
   }
@@ -126,6 +134,7 @@ export function DetailArtistPage() {
     setIsOpenModalApprove(false);
     setIsOpenModalReject(false);
     setIsOpenModalRevision(false);
+    setIsOpenModalDelete(false);
   }
 
   function rightContentHeader() {
@@ -162,12 +171,14 @@ export function DetailArtistPage() {
     );
   }
 
-  function componentModalApprove() {
+  function componentModalApproveDelete(type: "approve" | "delete") {
     return (
       <div className={""}>
         <PopupContent
-          isLoading={Artist?.approveArtist?.loading}
-          title={"Approve Artist"}
+          isLoading={
+            Artist?.approveArtist?.loading || Artist?.deleteArtist?.loading
+          }
+          title={type === "approve" ? "Approve Artist" : "Delete Artist"}
           subTitle={"Have you checked the data clearly?"}
           image={assets.illustration.il_question}
         />
@@ -206,8 +217,15 @@ export function DetailArtistPage() {
         isOpen={isOpenModalApprove}
         onClose={onCloseModal}
         onCancel={onCloseModal}
-        components={componentModalApprove()}
+        components={componentModalApproveDelete("approve")}
         onSubmit={() => onClickActionsArtist("publish")}
+      />
+      <PopupModal
+        isOpen={isOpenModalDelete}
+        onClose={onCloseModal}
+        onCancel={onCloseModal}
+        components={componentModalApproveDelete("delete")}
+        onSubmit={() => onClickActionsArtist("delete")}
       />
       <PopupModal
         isOpen={isOpenModalReject}
@@ -264,7 +282,31 @@ export function DetailArtistPage() {
               />
             </div>
           </MainCard>
-          <MainCard className={"w-1/2"}>
+          <MainCard className={"w-1/2 grid gap-4 h-fit"}>
+            <MainCard className={"h-fit"}>
+              <Row justify={"space-between"} itemsAlign={"center"} gap={"sm"}>
+                <div className={"text-slate-400"}>
+                  <QuestionMark color={"inherit"} />
+                </div>
+                <Row fitContent itemsAlign={"center"} gap={"sm"}>
+                  <Btn
+                    variant={"outlined"}
+                    color={"error"}
+                    onClick={() => setIsOpenModalDelete(true)}
+                  >
+                    Delete
+                  </Btn>
+                  <Btn
+                    onClick={() =>
+                      navigate(stringRoutes.editArtist(slug ?? ""))
+                    }
+                    variant={"outlined"}
+                  >
+                    Edit
+                  </Btn>
+                </Row>
+              </Row>
+            </MainCard>
             <Row gap={"lg"}>
               {dataDetail?.image && (
                 <img alt={"name"} className={"w-1/2"} src={dataDetail?.image} />

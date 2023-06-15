@@ -17,6 +17,7 @@ const checkActiveSidebar = (path: string): string => {
   const splitPath = path.split("/");
   return splitPath[1];
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const checkActiveSidebarChild = (path: string): string => {
   const splitPath = path.split("/");
   return splitPath[2];
@@ -103,7 +104,6 @@ const MultiLevel = ({ item }: IMenuItem) => {
   const location = useLocation();
   const uri = location.pathname;
   const handleClick = (link?: string) => {
-    console.log(checkActiveSidebar(link ?? ""));
     if (checkActiveSidebar(link ?? "") === checkActiveSidebar(uri)) {
       setOpen(true);
     } else {

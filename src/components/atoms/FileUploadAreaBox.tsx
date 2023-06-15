@@ -7,8 +7,13 @@ import { DriveFolderUpload } from "@mui/icons-material";
 export function FileUploadAreaBox(props: IProps) {
   const [preview, setPreview] = useState("");
   const [loadingUpload, setLoadingUpload] = useState<boolean>(false);
-
   const inputRef: any = useRef();
+
+  useEffect(() => {
+    if (props.url) {
+      setPreview(props.url);
+    }
+  }, [props.url]);
 
   useEffect(() => {
     if (preview) {
@@ -100,4 +105,5 @@ interface IProps {
   errorMessage?: any;
   id?: string;
   name?: string;
+  url?: string;
 }

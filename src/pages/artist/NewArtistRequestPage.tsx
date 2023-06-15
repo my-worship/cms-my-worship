@@ -14,32 +14,27 @@ import { FileUploadAreaBox } from "../../components/atoms/FileUploadAreaBox";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { ArtistActions } from "../../redux/actions/artist.actions";
 import { UiServices } from "../../services/UiServices";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { IResDetailArtist } from "../../model/response/IResDetailArtist";
 
 export function NewArtistRequestPage() {
+  const [saveDraft, setSaveDraf] = useState<boolean>(false);
+  const [slug, setSlug] = useState<string | undefined>();
+  const [dataDetail, setDataDetail] = useState<IResDetailArtist | undefined>(
+    undefined
+  );
   const dispatch = useAppDispatch();
   const { Artist } = useAppSelector((state) => state);
   const artistActions = new ArtistActions();
   const uiService = new UiServices();
   const navigate = useNavigate();
   const stringRoutes = new StringRoutes();
-  const [saveDraft, setSaveDraf] = useState<boolean>(false);
-  useEffect(() => {
-    if (Artist.createArtist?.data) {
-      uiService.handleSnackbarSuccess("Artist Success Requested");
-      navigate(stringRoutes.artist());
-      dispatch(artistActions.resetArtistReducers()).then();
-    } else if (Artist.approveArtist?.data) {
-      uiService.handleSnackbarSuccess("Save Artist Draft Success");
-      navigate(stringRoutes.artist());
-      dispatch(artistActions.resetArtistReducers()).then();
-    }
-  }, [Artist.createArtist, Artist.approveArtist]);
-
+  const params = useParams();
   const initValueCreate: IRequestNewArtist = {
     name: "",
     notes: "",
     description: "",
+    image: "",
   };
   const formik = useFormik({
     initialValues: initValueCreate,
@@ -58,15 +53,69 @@ export function NewArtistRequestPage() {
       setTimeout(() => {
         if (saveDraft) {
           dispatch(artistActions.saveDraftArtist(data)).then();
+        } else if (slug) {
+          dispatch(artistActions.editArtist(slug, data)).then();
         } else {
           dispatch(artistActions.createArtist(data)).then();
         }
       }, 200);
     },
   });
+
+  useEffect(() => {
+    if (params?.slug) {
+      setSlug(params?.slug);
+    }
+  }, [params]);
+
+  useEffect(() => {
+    if (Artist?.detailArtist?.data) {
+      setDataDetail(Artist?.detailArtist?.data);
+    } else {
+      setDataDetail(undefined);
+    }
+  }, [Artist?.detailArtist?.data]);
+
+  useEffect(() => {
+    if (slug) {
+      dispatch(artistActions.getDetailArtistBySlug(slug)).then();
+    }
+  }, [slug]);
+
+  useEffect(() => {
+    if (dataDetail) {
+      formik.setFieldValue("name", dataDetail.name);
+      formik.setFieldValue("notes", dataDetail.request_note);
+      formik.setFieldValue("description", dataDetail.description);
+      formik.setFieldValue("image", dataDetail.image);
+    } else {
+      formik.setFieldValue("name", "");
+      formik.setFieldValue("notes", "");
+      formik.setFieldValue("description", "");
+      formik.setFieldValue("image", "");
+    }
+  }, [dataDetail]);
+
+  useEffect(() => {
+    if (Artist.createArtist?.data) {
+      uiService.handleSnackbarSuccess("Artist Success Requested");
+      navigate(stringRoutes.artist());
+      dispatch(artistActions.resetArtistReducers()).then();
+    } else if (Artist.approveArtist?.data) {
+      uiService.handleSnackbarSuccess("Save Artist Draft Success");
+      navigate(stringRoutes.artist());
+      dispatch(artistActions.resetArtistReducers()).then();
+    } else if (Artist.editArtist?.data) {
+      dispatch(artistActions.resetArtistReducers()).then(() => {
+        uiService.handleSnackbarSuccess("Artist Edit Success");
+        navigate(stringRoutes.artist());
+      });
+    }
+  }, [Artist.createArtist, Artist.approveArtist, Artist.editArtist]);
+
   const breadcrumb: IBreadCrumbList[] = [
     { path: stringRoutes.artist(), label: "Artist" },
-    { label: "New" },
+    { label: slug ? "Edit" : "New" },
   ];
 
   function rightContent() {
@@ -87,8 +136,10 @@ export function NewArtistRequestPage() {
   return (
     <div className={"grid gap-6"}>
       <HeaderLayouts
-        rightContent={rightContent()}
-        title={"Request New Artist"}
+        rightContent={
+          (!slug || dataDetail?.status === "DRAFT") && rightContent()
+        }
+        title={slug ? "Edit Artist" : "Request New Artist"}
         breadcrumbData={breadcrumb}
       />
       <MainCard>
@@ -103,6 +154,7 @@ export function NewArtistRequestPage() {
           <div className={"grid gap-6"}>
             <div className={"w-full h-40"}>
               <FileUploadAreaBox
+                url={formik.values.image}
                 onChange={(e) => formik.setFieldValue("image", e)}
               />
             </div>
@@ -112,10 +164,12 @@ export function NewArtistRequestPage() {
               name={"name"}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              value={formik.values.name}
               id={"name"}
               errorMessage={formik.touched.name && formik.errors.name}
             />
             <InputTextarea
+              value={formik.values.notes}
               label={"Request Note (optional)"}
               name={"notes"}
               onChange={formik.handleChange}

@@ -63,6 +63,18 @@ export const ArtistSlice = createSlice({
         loading: action.payload.loading,
       };
     },
+    deleteArtist: (state: IArtistReducers, action: BasePayload<boolean>) => {
+      state.reviseArtist = {
+        data: action.payload.data,
+        loading: action.payload.loading,
+      };
+    },
+    editArtist: (state: IArtistReducers, action: BasePayload<boolean>) => {
+      state.editArtist = {
+        data: action.payload.data,
+        loading: action.payload.loading,
+      };
+    },
   },
 });
 
@@ -74,4 +86,6 @@ export interface IArtistReducers {
   saveDraftArtist?: IPayloadData<boolean>;
   rejectArtist?: IPayloadData<boolean>;
   reviseArtist?: IPayloadData<boolean>;
+  deleteArtist?: IPayloadData<boolean>;
+  editArtist?: IPayloadData<boolean>;
 }

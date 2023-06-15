@@ -31,4 +31,8 @@ export class HttpService {
       this.HeaderSetting()
     );
   }
+
+  public DELETE(URL: string) {
+    return axios.delete(this.baseEndpoint + URL, this.HeaderSetting());
+  }
 }

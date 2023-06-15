@@ -124,6 +124,54 @@ export class ArtistActions extends BaseActions {
     };
   }
 
+  public deleteArtist(slug: string) {
+    return async (dispatch: Dispatch) => {
+      dispatch(this.artist.deleteArtist({ loading: true }));
+      await this.httpService
+        .DELETE(this.url.deleteArtist(slug))
+        .then(() => {
+          dispatch(this.artist.deleteArtist({ loading: false, data: true }));
+        })
+        .catch((e) => {
+          this.errorService.fetchApiError(e);
+          this.artist.deleteArtist({ loading: false, data: false });
+        });
+    };
+  }
+
+  public editArtist(slug: string, data: IRequestNewArtist) {
+    return async (dispatch: Dispatch) => {
+      dispatch(this.artist.editArtist({ data: false, loading: true }));
+      dispatch(
+        this.general.setLoading({
+          loading: true,
+          actionInitType: ActionsInitTypeEnum.EDIT_ARTIST,
+        })
+      );
+      await this.httpService
+        .PUT<IRequestNewArtist>(this.url.editArtist(slug), data)
+        .then(() => {
+          dispatch(this.artist.editArtist({ loading: false, data: true }));
+          dispatch(
+            this.general.setLoading({
+              loading: false,
+              actionInitType: ActionsInitTypeEnum.EDIT_ARTIST,
+            })
+          );
+        })
+        .catch((e) => {
+          this.errorService.fetchApiError(e);
+          dispatch(this.artist.editArtist({ loading: false, data: undefined }));
+          dispatch(
+            this.general.setLoading({
+              loading: false,
+              actionInitType: ActionsInitTypeEnum.EDIT_ARTIST,
+            })
+          );
+        });
+    };
+  }
+
   public createArtist(data: IRequestNewArtist) {
     return async (dispatch: Dispatch) => {
       dispatch(
@@ -163,6 +211,9 @@ export class ArtistActions extends BaseActions {
       dispatch(this.artist.listArtist({ data: undefined }));
       dispatch(this.artist.rejectArtist({ data: undefined }));
       dispatch(this.artist.reviseArtist({ data: undefined }));
+      dispatch(this.artist.deleteArtist({ data: undefined }));
+      dispatch(this.artist.editArtist({ data: undefined }));
+      dispatch(this.artist.detailArtist({ data: undefined }));
     };
   }
 }

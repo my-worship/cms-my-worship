@@ -12,4 +12,5 @@ export const routes = [
   { path: stringRoutes.requestArtist(), components: NewArtistRequestPage },
   { path: stringRoutes.lyrics(), components: LyricsPage },
   { path: stringRoutes.detailArtist(":slug"), components: DetailArtistPage },
+  { path: stringRoutes.editArtist(":slug"), components: NewArtistRequestPage },
 ];

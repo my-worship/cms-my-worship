@@ -13,6 +13,8 @@ export const endpoint = {
     approveArtist: (slug: string) => `/cms/artist/v1/approved/${slug}`,
     rejectArtist: (slug: string) => `/cms/artist/v1/reject/${slug}`,
     revisionArtist: (slug: string) => `/cms/artist/v1/need-revision/${slug}`,
+    deleteArtist: (slug: string) => `/cms/artist/v1/delete/${slug}`,
+    editArtist: (slug: string) => `/cms/artist/v1/edit/${slug}`,
     saveDraftArtist: () => "/cms/artist/v1/new-draft",
   },
   user: {

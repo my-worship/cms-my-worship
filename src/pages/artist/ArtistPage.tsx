@@ -53,6 +53,7 @@ export function ArtistPage() {
 
   useEffect(() => {
     fetchDataList("all");
+    dispatch(artistActions.resetArtistReducers()).then();
   }, []);
 
   function fetchDataList(status: TypeArtistStatus, param?: string) {
@@ -92,7 +93,6 @@ export function ArtistPage() {
   function onChangePagination(e: IPaginatedParams) {
     const param = queryParamsHelper.getUrlParsingValue(e);
     fetchDataList(statusFilter, param);
-    navigate({ search: param });
   }
 
   const tableColumnData: ITableColumnData[] = [
@@ -122,7 +122,13 @@ export function ArtistPage() {
     return (
       <div>
         <IconBtnWithTooltip
-          onClick={() => navigate(stringRoutes.detailArtist(e.slug))}
+          onClick={() =>
+            navigate(
+              e.status_enum === StatusEnum.DRAFT
+                ? stringRoutes.editArtist(e.slug)
+                : stringRoutes.detailArtist(e.slug)
+            )
+          }
           label={"Details"}
           icon={e.status_enum === StatusEnum.DRAFT ? <Edit /> : <Info />}
         />
