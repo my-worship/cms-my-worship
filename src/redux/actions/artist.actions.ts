@@ -107,6 +107,23 @@ export class ArtistActions extends BaseActions {
     };
   }
 
+  public revisionArtist(slug: string, data: IReqRejectReviseArtist) {
+    return async (dispatch: Dispatch) => {
+      dispatch(this.artist.reviseArtist({ loading: true }));
+      await this.httpService
+        .PUT<IReqRejectReviseArtist>(this.url.revisionArtist(slug), data)
+        .then(() => {
+          dispatch(this.artist.reviseArtist({ data: true, loading: false }));
+        })
+        .catch((e) => {
+          this.errorService.fetchApiError(e);
+          dispatch(
+            this.artist.reviseArtist({ loading: false, data: undefined })
+          );
+        });
+    };
+  }
+
   public createArtist(data: IRequestNewArtist) {
     return async (dispatch: Dispatch) => {
       dispatch(
@@ -145,6 +162,7 @@ export class ArtistActions extends BaseActions {
       dispatch(this.artist.approveArtist({ data: undefined }));
       dispatch(this.artist.listArtist({ data: undefined }));
       dispatch(this.artist.rejectArtist({ data: undefined }));
+      dispatch(this.artist.reviseArtist({ data: undefined }));
     };
   }
 }

@@ -34,6 +34,8 @@ export function DetailArtistPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isOpenModalApprove, setIsOpenModalApprove] = useState<boolean>(false);
   const [isOpenModalReject, setIsOpenModalReject] = useState<boolean>(false);
+  const [isOpenModalRevision, setIsOpenModalRevision] =
+    useState<boolean>(false);
   const stringRoutes = new StringRoutes();
   const artistActions = new ArtistActions();
   const dateHelper = new DateHelper();
@@ -56,7 +58,12 @@ export function DetailArtistPage() {
         reason: values.reason,
       };
       if (slug) {
-        dispatch(artistActions.rejectArtist(slug, data)).then();
+        console.log(isOpenModalRevision);
+        if (isOpenModalReject) {
+          dispatch(artistActions.rejectArtist(slug, data)).then();
+        } else if (isOpenModalRevision) {
+          dispatch(artistActions.revisionArtist(slug, data)).then();
+        }
       }
     },
   });
@@ -89,6 +96,11 @@ export function DetailArtistPage() {
         navigate(stringRoutes.artist());
         uiService.handleSnackbarSuccess("Artist Success Approved");
       });
+    } else if (Artist?.reviseArtist?.data) {
+      dispatch(artistActions.resetArtistReducers()).then(() => {
+        navigate(stringRoutes.artist());
+        uiService.handleSnackbarSuccess("Artist Send Ned Revision Success");
+      });
     }
   }, [Artist]);
 
@@ -104,6 +116,8 @@ export function DetailArtistPage() {
         dispatch(artistActions.approveArtist(slug)).then();
       } else if (type === "reject") {
         formikReason.handleSubmit();
+      } else if (type === "need-revision") {
+        formikReason.handleSubmit();
       }
     }
   }
@@ -111,6 +125,7 @@ export function DetailArtistPage() {
   function onCloseModal() {
     setIsOpenModalApprove(false);
     setIsOpenModalReject(false);
+    setIsOpenModalRevision(false);
   }
 
   function rightContentHeader() {
@@ -125,7 +140,11 @@ export function DetailArtistPage() {
             <Close />
           </Button>
         </Tooltip>
-        <Tooltip arrow={true} title={"Revise"}>
+        <Tooltip
+          arrow={true}
+          title={"Revise"}
+          onClick={() => setIsOpenModalRevision(true)}
+        >
           <Button color={"info"} variant={"outlined"}>
             <Edit />
           </Button>
@@ -156,15 +175,19 @@ export function DetailArtistPage() {
     );
   }
 
-  function componentModalReject() {
+  function componentModalRevisionReject(type: TypeArtistStatus) {
     return (
       <div className={"grid gap-2"}>
-        <h3 className={"text-gray-600"}>Reject Artist</h3>
+        <h3 className={"text-gray-600"}>
+          {type === "reject" ? "Reject Artist" : "Revision Artist"}
+        </h3>
         <InputTextarea
-          label={"Reject Reason"}
+          label={type === "reject" ? "Reject Reason" : "Revision reason"}
           required={true}
           name={"reason"}
-          placeholder={"Enter your reasons for rejecting this artist data"}
+          placeholder={`Enter your reasons for ${
+            type === "reject" ? "rejecting" : "revision"
+          } this artist data`}
           onChange={formikReason.handleChange}
           onBlur={formikReason.handleBlur}
           id={"reject_reason"}
@@ -190,9 +213,17 @@ export function DetailArtistPage() {
         isOpen={isOpenModalReject}
         onClose={onCloseModal}
         onCancel={onCloseModal}
-        components={componentModalReject()}
+        components={componentModalRevisionReject("reject")}
         onSubmit={() => onClickActionsArtist("reject")}
       />
+      <PopupModal
+        isOpen={isOpenModalRevision}
+        onClose={onCloseModal}
+        onCancel={onCloseModal}
+        components={componentModalRevisionReject("need-revision")}
+        onSubmit={() => onClickActionsArtist("need-revision")}
+      />
+
       <HeaderLayouts
         rightContent={
           dataDetail?.status === "PENDING" &&

@@ -66,7 +66,7 @@ export function ArtistPage() {
       search: e,
       ...paginatedData,
     });
-    fetchDataList(statusFilter);
+    fetchDataList(statusFilter, param);
     navigate({ search: param });
   }
 
@@ -84,11 +84,14 @@ export function ArtistPage() {
   function onClickChipsStatus(e: TypeArtistStatus) {
     setStatusFilter(e);
     fetchDataList(e);
+    setSearchValue("");
+    setIsActiveSearch(false);
+    navigate({ search: "" });
   }
 
   function onChangePagination(e: IPaginatedParams) {
     const param = queryParamsHelper.getUrlParsingValue(e);
-    fetchDataList(statusFilter);
+    fetchDataList(statusFilter, param);
     navigate({ search: param });
   }
 
