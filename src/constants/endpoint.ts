@@ -21,6 +21,9 @@ export const endpoint = {
   categories: {
     getListCategoriesSelect: () => "/cms/categories/v1/list-select",
   },
+  lyrics: {
+    create_lyrics: "/cms/lyrics/v1/new",
+  },
   user: {
     getMeData: () => "/cms/user/v1/get-me-data",
   },

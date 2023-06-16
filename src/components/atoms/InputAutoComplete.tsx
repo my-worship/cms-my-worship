@@ -57,6 +57,8 @@ export default function InputAutoComplete(props: IProps) {
       loading={loading}
       renderInput={(params) => (
         <TextField
+          helperText={props.errorMessage}
+          error={!!props.errorMessage}
           {...params}
           label={props.label}
           InputProps={{
@@ -86,4 +88,5 @@ interface IProps {
   placeholder?: string;
   onChange?: (e: number | string) => void;
   value?: any;
+  errorMessage?: any;
 }

@@ -6,7 +6,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 export function EditorCustoms(props: IProps) {
   return (
     <div>
-      <div className="">
+      <div className={props.errorMessage ? "editor_ck_customs_errors" : ""}>
         <CKEditor
           onChange={(event, editor) => {
             const data = editor.getData();
@@ -22,7 +22,7 @@ export function EditorCustoms(props: IProps) {
           data={props.value ?? ""}
         />
         {props.errorMessage && (
-          <div className={"text-xs text-red-600 pt-1"}>
+          <div className={"text-xs text-start pl-2 text-red-600 pt-1"}>
             {props.errorMessage}
           </div>
         )}

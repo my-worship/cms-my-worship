@@ -61,7 +61,13 @@ export default function InputMultipleAutoComplete(props: IProps) {
       )}
       style={{ width: "100%" }}
       renderInput={(params) => (
-        <TextField {...params} label="Checkboxes" placeholder="Favorites" />
+        <TextField
+          helperText={props.errorMessage}
+          error={!!props.errorMessage}
+          {...params}
+          label="Checkboxes"
+          placeholder="Favorites"
+        />
       )}
     />
   );
@@ -76,4 +82,5 @@ interface IProps {
   placeholder?: string;
   onChange?: (e: number[] | string[]) => void;
   value?: number[] | string[];
+  errorMessage?: any;
 }

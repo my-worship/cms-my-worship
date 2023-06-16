@@ -3,7 +3,11 @@ import { LoadingSpinner } from "./LoadingSpiner";
 
 export function PopupContent(props: IProps) {
   return (
-    <div className={"w-full flex flex-col items-center gap-4 relative"}>
+    <div
+      className={
+        "w-full flex flex-col max-w-lg mx-auto text-center items-center gap-4 relative"
+      }
+    >
       <div
         style={{
           opacity: props.isLoading ? 1 : 0,

@@ -60,3 +60,14 @@
   font-weight: 700 !important;
   box-shadow: none !important;
 }
+
+.editor_ck_customs_errors {
+  .ck-toolbar {
+    border-color: red !important;
+  }
+
+  .ck-content {
+    border-color: red !important;
+  }
+
+}
