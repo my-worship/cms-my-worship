@@ -68,7 +68,7 @@ export function NewEditLyricPage() {
   const formik = useFormik({
     initialValues: initValueCreate,
     validationSchema: validationScheme,
-    onSubmit: (values) => {
+    onSubmit: () => {
       setIsOpenModalPopupSubmit(true);
     },
   });
