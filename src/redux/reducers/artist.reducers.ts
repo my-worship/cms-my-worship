@@ -7,6 +7,7 @@ import {
 } from "../../utilities/type-utils";
 import { IResListArtist } from "../../model/response/IResListArtist";
 import { IResDetailArtist } from "../../model/response/IResDetailArtist";
+import { IResGetListArtistSelect } from "../../model/response/IResGetListArtistSelect";
 
 const initState: IArtistReducers = {};
 
@@ -75,6 +76,15 @@ export const ArtistSlice = createSlice({
         loading: action.payload.loading,
       };
     },
+    getListArtistSelect: (
+      state: IArtistReducers,
+      action: BasePayload<IResGetListArtistSelect[]>
+    ) => {
+      state.listArtistSelect = {
+        loading: action.payload.loading,
+        data: action.payload.data,
+      };
+    },
   },
 });
 
@@ -82,6 +92,7 @@ export interface IArtistReducers {
   createArtist?: IPayloadData<boolean>;
   listArtist?: IPayloadDataPaginated<IResListArtist[]>;
   detailArtist?: IPayloadData<IResDetailArtist>;
+  listArtistSelect?: IPayloadData<IResGetListArtistSelect[]>;
   approveArtist?: IPayloadData<boolean>;
   saveDraftArtist?: IPayloadData<boolean>;
   rejectArtist?: IPayloadData<boolean>;

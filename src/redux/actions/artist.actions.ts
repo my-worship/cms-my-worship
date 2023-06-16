@@ -12,6 +12,7 @@ import {
 import { IResListArtist } from "../../model/response/IResListArtist";
 import { IResDetailArtist } from "../../model/response/IResDetailArtist";
 import { IReqRejectReviseArtist } from "../../model/request/IReqRejectReviseArtist";
+import { IResGetListArtistSelect } from "../../model/response/IResGetListArtistSelect";
 
 export class ArtistActions extends BaseActions {
   private url = endpoint.artist;
@@ -168,6 +169,28 @@ export class ArtistActions extends BaseActions {
               actionInitType: ActionsInitTypeEnum.EDIT_ARTIST,
             })
           );
+        });
+    };
+  }
+
+  public getListArtistSelect() {
+    return async (dispatch: Dispatch) => {
+      dispatch(
+        this.artist.getListArtistSelect({ loading: true, data: undefined })
+      );
+      await this.httpService
+        .GET(this.url.getListArtistSelect())
+        .then((res: BaseResponse<IResGetListArtistSelect[]>) => {
+          dispatch(
+            this.artist.getListArtistSelect({
+              data: res.data.response_data,
+              loading: false,
+            })
+          );
+        })
+        .catch((e) => {
+          this.errorService.fetchApiError(e);
+          dispatch(this.artist.getListArtistSelect({}));
         });
     };
   }

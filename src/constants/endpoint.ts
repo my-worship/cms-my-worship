@@ -16,6 +16,7 @@ export const endpoint = {
     deleteArtist: (slug: string) => `/cms/artist/v1/delete/${slug}`,
     editArtist: (slug: string) => `/cms/artist/v1/edit/${slug}`,
     saveDraftArtist: () => "/cms/artist/v1/new-draft",
+    getListArtistSelect: () => `/cms/artist/v1/list-select`,
   },
   user: {
     getMeData: () => "/cms/user/v1/get-me-data",

@@ -7,6 +7,10 @@ export class StringRoutes {
     return "/lyrics";
   }
 
+  public newLyrics() {
+    return "/lyrics/new-request";
+  }
+
   public artist() {
     return "/artist/";
   }
@@ -14,6 +18,7 @@ export class StringRoutes {
   public detailArtist(slug: string) {
     return "/artist/detail/" + slug;
   }
+
   public editArtist(slug: string) {
     return "/artist/edit/" + slug;
   }
