@@ -139,6 +139,13 @@ export type TypeArtistStatus =
   | "draft"
   | "publish"
   | "reject";
+export type TypeLyricStatus =
+  | "all"
+  | "pending"
+  | "need-revision"
+  | "draft"
+  | "publish"
+  | "reject";
 
 export interface ISidebarMenu {
   icon: any;

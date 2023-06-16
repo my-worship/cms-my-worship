@@ -100,6 +100,7 @@ export function NewEditLyricPage() {
   useEffect(() => {
     if (Lyric.createLyric?.data) {
       uiService.handleSnackbarSuccess("Request Lyrics Success");
+      setIsOpenModalPopupSubmit(false);
       navigate(stringRoutes.lyrics());
       dispatch(lyricActions.resetLyricReducer()).then();
     }

@@ -12,7 +12,7 @@ export class StringRoutes {
   }
 
   public artist() {
-    return "/artist/";
+    return "/artist";
   }
 
   public detailArtist(slug: string) {

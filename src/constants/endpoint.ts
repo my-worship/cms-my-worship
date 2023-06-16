@@ -1,4 +1,4 @@
-import { TypeArtistStatus } from "../utilities/type-utils";
+import { TypeArtistStatus, TypeLyricStatus } from "../utilities/type-utils";
 
 export const endpoint = {
   auth: {
@@ -23,6 +23,8 @@ export const endpoint = {
   },
   lyrics: {
     create_lyrics: "/cms/lyrics/v1/new",
+    list_paginated_lyric: (status: TypeLyricStatus, param?: string) =>
+      `/cms/lyrics/v1/list/${status}${param ? param : ""}`,
   },
   user: {
     getMeData: () => "/cms/user/v1/get-me-data",

@@ -1,4 +1,7 @@
 export const assets = {
+  img: {
+    default_img: "/assets/image/img_default.png",
+  },
   logo: {
     brand_logo: "/assets/svg/logo/lg_brand_logo.svg",
   },
