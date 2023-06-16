@@ -16,19 +16,24 @@ import { InputTextarea } from "../../components/atoms/InputTextArea";
 import InputAutoComplete from "../../components/atoms/InputAutoComplete";
 import InputMultipleAutoComplete from "../../components/atoms/InputMultipleAutoComplete";
 import { EditorCustoms } from "../../components/atoms/EditorCustoms";
+import { CategoryActions } from "../../redux/actions/category.actions";
 
 export function NewEditLyricPage() {
   const [slug, setSlug] = useState<string>("");
   const [dataListArtist, setDataListArtist] = useState<ILabelValue<string>[]>(
     []
   );
+  const [dataListCategories, setDataListCategories] = useState<
+    ILabelValue<number>[]
+  >([]);
 
-  const stringRoutes = new StringRoutes();
-  const artistActions = new ArtistActions();
+  const stringRoutes: StringRoutes = new StringRoutes();
+  const artistActions: ArtistActions = new ArtistActions();
+  const categoryActions: CategoryActions = new CategoryActions();
 
   const dispatch = useAppDispatch();
   const params = useParams();
-  const { Artist } = useAppSelector((state) => state);
+  const { Artist, Category } = useAppSelector((state) => state);
   const initValueCreate: IReqCreateNewLyrics = {
     lyric: "",
     notes: "",
@@ -65,12 +70,7 @@ export function NewEditLyricPage() {
 
   useEffect(() => {
     dispatch(artistActions.getListArtistSelect()).then();
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      formik.setFieldValue("artist_slug", "artist-from-admin");
-    }, 1000);
+    dispatch(categoryActions.getListCategorySelect()).then();
   }, []);
 
   useEffect(() => {
@@ -86,6 +86,20 @@ export function NewEditLyricPage() {
       setDataListArtist(data);
     }
   }, [Artist.listArtistSelect]);
+
+  useEffect(() => {
+    if (Category.listCategorySelect?.data) {
+      const data: ILabelValue<number>[] = Category.listCategorySelect.data.map(
+        (item) => {
+          return {
+            label: item.name,
+            value: item.id,
+          };
+        }
+      );
+      setDataListCategories(data);
+    }
+  }, [Category.listCategorySelect?.data]);
 
   useEffect(() => {
     if (params?.slug) {
@@ -145,7 +159,7 @@ export function NewEditLyricPage() {
                 loading={Artist.listArtistSelect?.loading}
                 options={dataListArtist}
               />
-              <InputMultipleAutoComplete />
+              <InputMultipleAutoComplete options={dataListCategories} />
 
               <EditorCustoms
                 value={formik.values.description}
@@ -153,8 +167,8 @@ export function NewEditLyricPage() {
                 placeholder={"Lyric Description"}
               />
               <EditorCustoms
-                value={formik.values.description}
-                onChange={(e) => formik.setFieldValue("description", e)}
+                value={formik.values.lyric}
+                onChange={(e) => formik.setFieldValue("lyric", e)}
                 placeholder={"Lyrics"}
               />
             </div>

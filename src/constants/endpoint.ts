@@ -18,6 +18,9 @@ export const endpoint = {
     saveDraftArtist: () => "/cms/artist/v1/new-draft",
     getListArtistSelect: () => `/cms/artist/v1/list-select`,
   },
+  categories: {
+    getListCategoriesSelect: () => "/cms/categories/v1/list-select",
+  },
   user: {
     getMeData: () => "/cms/user/v1/get-me-data",
   },
