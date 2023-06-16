@@ -159,7 +159,11 @@ export function NewEditLyricPage() {
                 loading={Artist.listArtistSelect?.loading}
                 options={dataListArtist}
               />
-              <InputMultipleAutoComplete options={dataListCategories} />
+              <InputMultipleAutoComplete
+                value={formik.values.categories_id}
+                onChange={(e) => formik.setFieldValue("categories_id", e)}
+                options={dataListCategories}
+              />
 
               <EditorCustoms
                 value={formik.values.description}
