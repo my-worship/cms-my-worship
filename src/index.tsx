@@ -3,13 +3,13 @@ import ReactDOM from "react-dom/client";
 import { themeConfig } from "./config/theme.config";
 import { ThemeProvider } from "@mui/material";
 import App from "./App";
-import "./styles/index.scss";
 import { BrowserRouter } from "react-router-dom";
 import { ENV } from "./constants/env";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import storeRedux from "./redux/store";
 import { Provider } from "react-redux";
 import { SnackbarProvider } from "notistack";
+import "./styles/index.scss";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
