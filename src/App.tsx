@@ -4,6 +4,7 @@ import { LoginPage } from "./pages/auth/LoginPage";
 import Main from "./pages/Main";
 import AuthServices from "./services/AuthService";
 import { NotFoundRoutesPage } from "./components/molecules/NotFoundRoutesPage";
+import "./styles/index.scss";
 
 function App() {
   const authService = new AuthServices();

@@ -9,7 +9,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import storeRedux from "./redux/store";
 import { Provider } from "react-redux";
 import { SnackbarProvider } from "notistack";
-import "./styles/index.scss";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
