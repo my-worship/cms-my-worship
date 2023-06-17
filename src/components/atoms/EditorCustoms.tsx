@@ -9,7 +9,7 @@ export function EditorCustoms(props: IProps) {
       <div className={props.errorMessage ? "editor_ck_customs_errors" : ""}>
         <CKEditor
           onChange={(event, editor) => {
-            const data = editor.getData();
+            const data = editor?.getData();
             if (data && props.onChange) {
               props.onChange(data);
             }
