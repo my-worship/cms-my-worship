@@ -8,13 +8,15 @@ export function EditorCustoms(props: IProps) {
     <div>
       <div className={props.errorMessage ? "editor_ck_customs_errors" : ""}>
         <CKEditor
-          onChange={(event, editor) => {
-            const data = editor?.getData();
+          // @ts-ignore
+          onChange={(event, editor: ClassicEditor) => {
+            const data = editor.getData();
             if (data && props.onChange) {
               props.onChange(data);
             }
           }}
           onBlur={props.onBlur}
+          // @ts-ignore
           editor={ClassicEditor}
           config={{
             placeholder: props.placeholder ?? "",

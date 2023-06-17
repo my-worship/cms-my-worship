@@ -70,7 +70,8 @@ const SingleLevel = ({ item }: IMenuItem) => {
       navigate(link);
     }
   };
-  const uri = location.pathname;
+  const location = useLocation();
+  const uri = location?.pathname;
 
   return (
     <ListItem

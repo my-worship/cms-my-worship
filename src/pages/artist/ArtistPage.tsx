@@ -4,10 +4,7 @@ import { InputSearch } from "../../components/atoms/InputSearch";
 import { Btn } from "../../components/atoms/Btn";
 import { useNavigate } from "react-router-dom";
 import { StringRoutes } from "../../routes/string-routes";
-import {
-  ITableColumnData,
-  MainTable,
-} from "../../components/molecules/ MainTable";
+
 import { ArtistActions } from "../../redux/actions/artist.actions";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { IResListArtist } from "../../model/response/IResListArtist";
@@ -29,6 +26,10 @@ import {
 } from "../../constants/StatusListConstants";
 import { StatusEnum } from "../../enums/statusEnum";
 import { UserRoleEnum } from "../../enums/UserRoleEnums";
+import {
+  ITableColumnData,
+  MainTable,
+} from "../../components/molecules/MainTable";
 
 export function ArtistPage() {
   const [paginatedData, setPaginatedData] =

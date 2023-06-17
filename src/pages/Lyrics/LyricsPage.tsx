@@ -12,7 +12,7 @@ import { IResListLyrics } from "../../model/response/IResListLyrics";
 import {
   ITableColumnData,
   MainTable,
-} from "../../components/molecules/ MainTable";
+} from "../../components/molecules/MainTable";
 import { DateHelper } from "../../helper/date-helper";
 import { StatusEnum } from "../../enums/statusEnum";
 import { Chip } from "@mui/material";
